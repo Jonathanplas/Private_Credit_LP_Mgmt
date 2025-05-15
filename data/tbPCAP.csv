@@ -1,0 +1,732 @@
+PCAP Date,LP Short Name,Field Num,Field, Amount 
+6/30/2021,Indiana,1,Beginning Capital Balance,0
+6/30/2021,Indiana,2,Capital Calls,"82,539,202"
+6/30/2021,Indiana,4,Distributions,0
+6/30/2021,Indiana,7,Interest Income,"2,463,363"
+6/30/2021,Indiana,8,Realized Gain / (Loss),0
+6/30/2021,Indiana,9,Unrealized Gain / (Loss),0
+6/30/2021,Indiana,10,Investment Expenses,"-51,739"
+6/30/2021,Indiana,11,Management Fees,"-189,018"
+6/30/2021,Indiana,12,Carried Interest,"-328,154"
+6/30/2021,Indiana,15,Fund Expenses,"-34,916"
+6/30/2021,Indiana,16,Ending Capital Balance,"84,398,739"
+9/30/2021,Indiana,1,Beginning Capital Balance,"84,398,739"
+9/30/2021,Indiana,2,Capital Calls,"29,960,798"
+9/30/2021,Indiana,4,Distributions,"-1,859,537"
+9/30/2021,Indiana,7,Interest Income,"4,092,997"
+9/30/2021,Indiana,8,Realized Gain / (Loss),0
+9/30/2021,Indiana,9,Unrealized Gain / (Loss),0
+9/30/2021,Indiana,10,Investment Expenses,"-106,009"
+9/30/2021,Indiana,11,Management Fees,"-350,803"
+9/30/2021,Indiana,12,Carried Interest,"-531,403"
+9/30/2021,Indiana,15,Fund Expenses,"-93,501"
+9/30/2021,Indiana,16,Ending Capital Balance,"115,511,281"
+12/31/2021,Indiana,1,Beginning Capital Balance,"115,511,281"
+12/31/2021,Indiana,2,Capital Calls,"37,500,000"
+12/31/2021,Indiana,4,Distributions,"-3,011,281"
+12/31/2021,Indiana,7,Interest Income,"5,166,602"
+12/31/2021,Indiana,8,Realized Gain / (Loss),0
+12/31/2021,Indiana,9,Unrealized Gain / (Loss),0
+12/31/2021,Indiana,10,Investment Expenses,"-97,864"
+12/31/2021,Indiana,11,Management Fees,"-541,713"
+12/31/2021,Indiana,12,Carried Interest,"-670,790"
+12/31/2021,Indiana,15,Fund Expenses,"-55,095"
+12/31/2021,Indiana,16,Ending Capital Balance,"153,801,141"
+3/31/2022,Indiana,1,Beginning Capital Balance,"153,801,141"
+3/31/2022,Indiana,2,Capital Calls,0
+3/31/2022,Indiana,4,Distributions,"-37,880,179"
+3/31/2022,Indiana,7,Interest Income,"9,182,412"
+3/31/2022,Indiana,8,Realized Gain / (Loss),0
+3/31/2022,Indiana,9,Unrealized Gain / (Loss),0
+3/31/2022,Indiana,10,Investment Expenses,"-20,618"
+3/31/2022,Indiana,11,Management Fees,"-507,683"
+3/31/2022,Indiana,12,Carried Interest,"-1,285,913"
+3/31/2022,Indiana,15,Fund Expenses,"-81,359"
+3/31/2022,Indiana,16,Ending Capital Balance,"123,207,801"
+3/31/2022,Breeze,1,Beginning Capital Balance,0
+3/31/2022,Breeze,2,Capital Calls,"85,625,355"
+3/31/2022,Breeze,4,Distributions,0
+3/31/2022,Breeze,7,Interest Income,"1,868,853"
+3/31/2022,Breeze,8,Realized Gain / (Loss),0
+3/31/2022,Breeze,9,Unrealized Gain / (Loss),0
+3/31/2022,Breeze,10,Investment Expenses,"-195,072"
+3/31/2022,Breeze,11,Management Fees,"-137,421"
+3/31/2022,Breeze,12,Carried Interest,"-210,708"
+3/31/2022,Breeze,15,Fund Expenses,"-131,643"
+3/31/2022,Breeze,16,Ending Capital Balance,"86,819,365"
+6/30/2022,Indiana,1,Beginning Capital Balance,"123,207,801"
+6/30/2022,Indiana,2,Capital Calls,0
+6/30/2022,Indiana,4,Distributions,"-3,207,801"
+6/30/2022,Indiana,7,Interest Income,"3,740,164"
+6/30/2022,Indiana,8,Realized Gain / (Loss),0
+6/30/2022,Indiana,9,Unrealized Gain / (Loss),0
+6/30/2022,Indiana,10,Investment Expenses,"-15,841"
+6/30/2022,Indiana,11,Management Fees,"-444,604"
+6/30/2022,Indiana,12,Carried Interest,"-479,700"
+6/30/2022,Indiana,15,Fund Expenses,"-81,720"
+6/30/2022,Indiana,16,Ending Capital Balance,"122,718,299"
+6/30/2022,Breeze,1,Beginning Capital Balance,"86,819,364"
+6/30/2022,Breeze,2,Capital Calls,"28,541,785"
+6/30/2022,Breeze,4,Distributions,"-1,194,009"
+6/30/2022,Breeze,7,Interest Income,"3,780,134"
+6/30/2022,Breeze,8,Realized Gain / (Loss),0
+6/30/2022,Breeze,9,Unrealized Gain / (Loss),0
+6/30/2022,Breeze,10,Investment Expenses,"-76,515"
+6/30/2022,Breeze,11,Management Fees,"-353,355"
+6/30/2022,Breeze,12,Carried Interest,"-492,102"
+6/30/2022,Breeze,15,Fund Expenses,"-69,588"
+6/30/2022,Breeze,16,Ending Capital Balance,"116,955,715"
+9/30/2022,Indiana,1,Beginning Capital Balance,"122,718,299"
+9/30/2022,Indiana,2,Capital Calls,0
+9/30/2022,Indiana,4,Distributions,"-3,801,632"
+9/30/2022,Indiana,7,Interest Income,"3,757,298"
+9/30/2022,Indiana,8,Realized Gain / (Loss),0
+9/30/2022,Indiana,9,Unrealized Gain / (Loss),0
+9/30/2022,Indiana,10,Investment Expenses,"-16,313"
+9/30/2022,Indiana,11,Management Fees,"-446,412"
+9/30/2022,Indiana,12,Carried Interest,"-483,092"
+9/30/2022,Indiana,15,Fund Expenses,"-73,960"
+9/30/2022,Indiana,16,Ending Capital Balance,"121,654,188"
+9/30/2022,Breeze,1,Beginning Capital Balance,"116,955,715"
+9/30/2022,Breeze,2,Capital Calls,"114,167,140"
+9/30/2022,Breeze,4,Distributions,"-2,788,575"
+9/30/2022,Breeze,7,Interest Income,"4,177,371"
+9/30/2022,Breeze,8,Realized Gain / (Loss),0
+9/30/2022,Breeze,9,Unrealized Gain / (Loss),0
+9/30/2022,Breeze,10,Investment Expenses,"-224,969"
+9/30/2022,Breeze,11,Management Fees,"-415,113"
+9/30/2022,Breeze,12,Carried Interest,"-520,992"
+9/30/2022,Breeze,15,Fund Expenses,"-64,006"
+9/30/2022,Breeze,16,Ending Capital Balance,"117,119,431"
+12/31/2022,Indiana,1,Beginning Capital Balance,"121,654,188"
+12/31/2022,Indiana,2,Capital Calls,0
+12/31/2022,Indiana,4,Distributions,"-2,737,521"
+12/31/2022,Indiana,7,Interest Income,"4,096,816"
+12/31/2022,Indiana,8,Realized Gain / (Loss),0
+12/31/2022,Indiana,9,Unrealized Gain / (Loss),0
+12/31/2022,Indiana,10,Investment Expenses,"-38,636"
+12/31/2022,Indiana,11,Management Fees,"-446,412"
+12/31/2022,Indiana,12,Carried Interest,"-530,229"
+12/31/2022,Indiana,15,Fund Expenses,"-76,909"
+12/31/2022,Indiana,16,Ending Capital Balance,"121,921,297"
+12/31/2022,Breeze,1,Beginning Capital Balance,"117,119,431"
+12/31/2022,Breeze,2,Capital Calls,"114,167,140"
+12/31/2022,Breeze,4,Distributions,"-2,952,291"
+12/31/2022,Breeze,7,Interest Income,"4,614,953"
+12/31/2022,Breeze,8,Realized Gain / (Loss),0
+12/31/2022,Breeze,9,Unrealized Gain / (Loss),0
+12/31/2022,Breeze,10,Investment Expenses,"-148,920"
+12/31/2022,Breeze,11,Management Fees,"-425,472"
+12/31/2022,Breeze,12,Carried Interest,"-594,128"
+12/31/2022,Breeze,15,Fund Expenses,"-79,708"
+12/31/2022,Breeze,16,Ending Capital Balance,"117,533,865"
+3/31/2023,Dolce,1,Beginning Capital Balance,0
+3/31/2023,Dolce,2,Capital Calls,"1,860,000"
+3/31/2023,Dolce,5,Distributions (Principal),0
+3/31/2023,Dolce,6,Distributions (Income),0
+3/31/2023,Dolce,7,Interest Income,"60,192"
+3/31/2023,Dolce,8,Realized Gain / (Loss),0
+3/31/2023,Dolce,10,Investment Expenses,"-17,258"
+3/31/2023,Dolce,11,Management Fees,"-4,688"
+3/31/2023,Dolce,12,Carried Interest,"-6,955"
+3/31/2023,Dolce,15,Fund Expenses,"-3,472"
+3/31/2023,Dolce,16,Ending Capital Balance,"1,887,819"
+3/31/2023,Indiana,1,Beginning Capital Balance,"121,921,298"
+3/31/2023,Indiana,2,Capital Calls,93000000
+3/31/2023,Indiana,5,Distributions (Principal),0
+3/31/2023,Indiana,6,Distributions (Income),"-3,004,631"
+3/31/2023,Indiana,7,Interest Income,"6,880,238"
+3/31/2023,Indiana,8,Realized Gain / (Loss),0
+3/31/2023,Indiana,10,Investment Expenses,"-887,496"
+3/31/2023,Indiana,11,Management Fees,"-615,637"
+3/31/2023,Indiana,12,Carried Interest,"-768,711"
+3/31/2023,Indiana,15,Fund Expenses,"-252,368"
+3/31/2023,Indiana,16,Ending Capital Balance,"216,272,694"
+3/31/2023,Breeze,1,Beginning Capital Balance,"117,533,865"
+3/31/2023,Breeze,2,Capital Calls,0
+3/31/2023,Breeze,5,Distributions (Principal),0
+3/31/2023,Breeze,6,Distributions (Income),"-3,366,725"
+3/31/2023,Breeze,7,Interest Income,"4,584,587"
+3/31/2023,Breeze,8,Realized Gain / (Loss),0
+3/31/2023,Breeze,10,Investment Expenses,"-26,847"
+3/31/2023,Breeze,11,Management Fees,"-422,262"
+3/31/2023,Breeze,12,Carried Interest,"-611,061"
+3/31/2023,Breeze,15,Fund Expenses,"-61,737"
+3/31/2023,Breeze,16,Ending Capital Balance,"117,629,818"
+6/30/2023,Dolce,1,Beginning Capital Balance,1887819
+6/30/2023,Dolce,2,Capital Calls,"870,000"
+6/30/2023,Dolce,5,Distributions (Principal),0
+6/30/2023,Dolce,6,Distributions (Income),-27819
+6/30/2023,Dolce,7,Interest Income,"118,260"
+6/30/2023,Dolce,8,Realized Gain / (Loss),0
+6/30/2023,Dolce,10,Investment Expenses,"-14,292"
+6/30/2023,Dolce,11,Management Fees,"-13,613"
+6/30/2023,Dolce,12,Carried Interest,"-17,460"
+6/30/2023,Dolce,15,Fund Expenses,"-3,058"
+6/30/2023,Dolce,16,Ending Capital Balance,"2,799,838"
+6/30/2023,Indiana,1,Beginning Capital Balance,"216,272,694"
+6/30/2023,Indiana,2,Capital Calls,"43,500,000"
+6/30/2023,Indiana,5,Distributions (Principal),-1875000
+6/30/2023,Indiana,6,Distributions (Income),"-4,356,027"
+6/30/2023,Indiana,7,Interest Income,"9,863,673"
+6/30/2023,Indiana,8,Realized Gain / (Loss),0
+6/30/2023,Indiana,10,Investment Expenses,"-741,992"
+6/30/2023,Indiana,11,Management Fees,"-950,257"
+6/30/2023,Indiana,12,Carried Interest,"-1,189,468"
+6/30/2023,Indiana,15,Fund Expenses,"-241,639"
+6/30/2023,Indiana,16,Ending Capital Balance,"260,281,985"
+6/30/2023,Breeze,1,Beginning Capital Balance,"117,629,818"
+6/30/2023,Breeze,2,Capital Calls,0
+6/30/2023,Breeze,5,Distributions (Principal),"-1,268,709"
+6/30/2023,Breeze,6,Distributions (Income),"-3,462,679"
+6/30/2023,Breeze,7,Interest Income,"4,687,611"
+6/30/2023,Breeze,8,Realized Gain / (Loss),0
+6/30/2023,Breeze,10,Investment Expenses,"-26,665"
+6/30/2023,Breeze,11,Management Fees,"-423,617"
+6/30/2023,Breeze,12,Carried Interest,"-626,334"
+6/30/2023,Breeze,15,Fund Expenses,"-61,769"
+6/30/2023,Breeze,16,Ending Capital Balance,"116,447,657"
+9/30/2023,Dolce,1,Beginning Capital Balance,"2,799,838"
+9/30/2023,Dolce,2,Capital Calls,270000
+9/30/2023,Dolce,5,Distributions (Principal),0
+9/30/2023,Dolce,6,Distributions (Income),"-59,989"
+9/30/2023,Dolce,7,Interest Income,"132,979"
+9/30/2023,Dolce,8,Realized Gain / (Loss),0
+9/30/2023,Dolce,10,Investment Expenses,"-4,419"
+9/30/2023,Dolce,11,Management Fees,"-15,123"
+9/30/2023,Dolce,12,Carried Interest,"-21,573"
+9/30/2023,Dolce,15,Fund Expenses,"-2,889"
+9/30/2023,Dolce,16,Ending Capital Balance,"3,098,823"
+9/30/2023,Indiana,1,Beginning Capital Balance,"260,281,985"
+9/30/2023,Indiana,2,Capital Calls,"10,995,000"
+9/30/2023,Indiana,5,Distributions (Principal),550405
+9/30/2023,Indiana,6,Distributions (Income),"-5,247,890"
+9/30/2023,Indiana,7,Interest Income,"10,043,550"
+9/30/2023,Indiana,8,Realized Gain / (Loss),0
+9/30/2023,Indiana,10,Investment Expenses,"-238,564"
+9/30/2023,Indiana,11,Management Fees,"-938,682"
+9/30/2023,Indiana,12,Carried Interest,"-1,299,474"
+9/30/2023,Indiana,15,Fund Expenses,"-203,144"
+9/30/2023,Indiana,16,Ending Capital Balance,"273,943,185"
+9/30/2023,Breeze,1,Beginning Capital Balance,"116,447,657"
+9/30/2023,Breeze,2,Capital Calls,0
+9/30/2023,Breeze,5,Distributions (Principal),-621418
+9/30/2023,Breeze,6,Distributions (Income),"-3,032,990"
+9/30/2023,Breeze,7,Interest Income,"5,039,670"
+9/30/2023,Breeze,8,Realized Gain / (Loss),0
+9/30/2023,Breeze,10,Investment Expenses,"-32,684"
+9/30/2023,Breeze,11,Management Fees,"-425,189"
+9/30/2023,Breeze,12,Carried Interest,"-677,917"
+9/30/2023,Breeze,15,Fund Expenses,"-62,350"
+9/30/2023,Breeze,16,Ending Capital Balance,"116,634,779"
+12/31/2023,Dolce,1,Beginning Capital Balance,"3,098,823"
+12/31/2023,Dolce,2,Capital Calls,"3,000,000"
+12/31/2023,Dolce,5,Distributions (Principal),0
+12/31/2023,Dolce,6,Distributions (Income),"-83,908"
+12/31/2023,Dolce,7,Interest Income,"123,278"
+12/31/2023,Dolce,8,Realized Gain / (Loss),0
+12/31/2023,Dolce,10,Investment Expenses,-662
+12/31/2023,Dolce,11,Management Fees,"-15,123"
+12/31/2023,Dolce,12,Carried Interest,"-19,816"
+12/31/2023,Dolce,15,Fund Expenses,"-4,005"
+12/31/2023,Dolce,16,Ending Capital Balance,"3,098,587"
+12/31/2023,Indiana,1,Beginning Capital Balance,"275,956,959"
+12/31/2023,Indiana,2,Capital Calls,147495000
+12/31/2023,Indiana,5,Distributions (Principal),"-4,698,789"
+12/31/2023,Indiana,6,Distributions (Income),"-7,085,278"
+12/31/2023,Indiana,7,Interest Income,"9,355,469"
+12/31/2023,Indiana,8,Realized Gain / (Loss),0
+12/31/2023,Indiana,10,Investment Expenses,"-47,731"
+12/31/2023,Indiana,11,Management Fees,"-918,988"
+12/31/2023,Indiana,12,Carried Interest,"-1,217,948"
+12/31/2023,Indiana,15,Fund Expenses,"-269,092"
+12/31/2023,Indiana,16,Ending Capital Balance,"268,569,602"
+12/31/2023,Breeze,1,Beginning Capital Balance,"116,634,779"
+12/31/2023,Breeze,2,Capital Calls,0
+12/31/2023,Breeze,5,Distributions (Principal),-8972197
+12/31/2023,Breeze,6,Distributions (Income),"-3,707,438"
+12/31/2023,Breeze,7,Interest Income,"4,591,154"
+12/31/2023,Breeze,8,Realized Gain / (Loss),0
+12/31/2023,Breeze,10,Investment Expenses,"-24,133"
+12/31/2023,Breeze,11,Management Fees,"-411,972"
+12/31/2023,Breeze,12,Carried Interest,"-614,061"
+12/31/2023,Breeze,15,Fund Expenses,"-61,313"
+12/31/2023,Breeze,16,Ending Capital Balance,"107,434,820"
+3/31/2024,Red Rose,1,Beginning Capital Balance,0
+3/31/2024,Red Rose,2,Capital Calls,"165,000"
+3/31/2024,Red Rose,5,Distributions (Principal),0
+3/31/2024,Red Rose,6,Distributions (Income),0
+3/31/2024,Red Rose,7,Interest Income,"4,344"
+3/31/2024,Red Rose,8,Realized Gain / (Loss),0
+3/31/2024,Red Rose,9,Unrealized Gain / (Loss),0
+3/31/2024,Red Rose,10,Investment Expenses,"-1,705"
+3/31/2024,Red Rose,11,Management Fees,-478
+3/31/2024,Red Rose,13,Realized Carried Interest,0
+3/31/2024,Red Rose,14,Unrealized Carried Interest,-409
+3/31/2024,Red Rose,15,Fund Expenses,-116
+3/31/2024,Red Rose,16,Ending Capital Balance,"166,637"
+3/31/2024,Berry Blues,1,Beginning Capital Balance,0
+3/31/2024,Berry Blues,2,Capital Calls,"330,000"
+3/31/2024,Berry Blues,5,Distributions (Principal),0
+3/31/2024,Berry Blues,6,Distributions (Income),0
+3/31/2024,Berry Blues,7,Interest Income,"8,688"
+3/31/2024,Berry Blues,8,Realized Gain / (Loss),0
+3/31/2024,Berry Blues,9,Unrealized Gain / (Loss),0
+3/31/2024,Berry Blues,10,Investment Expenses,"-3,409"
+3/31/2024,Berry Blues,11,Management Fees,-956
+3/31/2024,Berry Blues,13,Realized Carried Interest,0
+3/31/2024,Berry Blues,14,Unrealized Carried Interest,-818
+3/31/2024,Berry Blues,15,Fund Expenses,-231
+3/31/2024,Berry Blues,16,Ending Capital Balance,"333,273"
+3/31/2024,Dolce,1,Beginning Capital Balance,"3,098,587"
+3/31/2024,Dolce,2,Capital Calls,0
+3/31/2024,Dolce,5,Distributions (Principal),0
+3/31/2024,Dolce,6,Distributions (Income),"-76,716"
+3/31/2024,Dolce,7,Interest Income,"125,005"
+3/31/2024,Dolce,8,Realized Gain / (Loss),-377
+3/31/2024,Dolce,9,Unrealized Gain / (Loss),82
+3/31/2024,Dolce,10,Investment Expenses,-171
+3/31/2024,Dolce,11,Management Fees,"-14,918"
+3/31/2024,Dolce,13,Realized Carried Interest,-19179
+3/31/2024,Dolce,14,Unrealized Carried Interest,"-1,758"
+3/31/2024,Dolce,15,Fund Expenses,"-2,091"
+3/31/2024,Dolce,16,Ending Capital Balance,3108463
+3/31/2024,Indiana,1,Beginning Capital Balance,"268,569,602"
+3/31/2024,Indiana,2,Capital Calls,0
+3/31/2024,Indiana,5,Distributions (Principal),0
+3/31/2024,Indiana,6,Distributions (Income),"-7,089,819"
+3/31/2024,Indiana,7,Interest Income,"9,977,004"
+3/31/2024,Indiana,8,Realized Gain / (Loss),-18868
+3/31/2024,Indiana,9,Unrealized Gain / (Loss),"4,099"
+3/31/2024,Indiana,10,Investment Expenses,-14542
+3/31/2024,Indiana,11,Management Fees,-969067
+3/31/2024,Indiana,13,Realized Carried Interest,"-1,251,144"
+3/31/2024,Indiana,14,Unrealized Carried Interest,-40181
+3/31/2024,Indiana,15,Fund Expenses,-188687
+3/31/2024,Indiana,16,Ending Capital Balance,"268,978,397"
+3/31/2024,Breeze,1,Beginning Capital Balance,107434820
+3/31/2024,Breeze,2,Capital Calls,0
+3/31/2024,Breeze,5,Distributions (Principal),-432740
+3/31/2024,Breeze,6,Distributions (Income),-3355128
+3/31/2024,Breeze,7,Interest Income,"4,066,124"
+3/31/2024,Breeze,8,Realized Gain / (Loss),0
+3/31/2024,Breeze,9,Unrealized Gain / (Loss),0
+3/31/2024,Breeze,10,Investment Expenses,-5653
+3/31/2024,Breeze,11,Management Fees,-382297
+3/31/2024,Breeze,13,Realized Carried Interest,"-592,081"
+3/31/2024,Breeze,14,Unrealized Carried Interest,60531
+3/31/2024,Breeze,15,Fund Expenses,-68056
+3/31/2024,Breeze,16,Ending Capital Balance,"106,725,519"
+3/31/2024,Gabbana,1,Beginning Capital Balance,0
+3/31/2024,Gabbana,2,Capital Calls,165000
+3/31/2024,Gabbana,5,Distributions (Principal),0
+3/31/2024,Gabbana,6,Distributions (Income),0
+3/31/2024,Gabbana,7,Interest Income,"4,344"
+3/31/2024,Gabbana,8,Realized Gain / (Loss),0
+3/31/2024,Gabbana,9,Unrealized Gain / (Loss),0
+3/31/2024,Gabbana,10,Investment Expenses,-1705
+3/31/2024,Gabbana,11,Management Fees,-478
+3/31/2024,Gabbana,13,Realized Carried Interest,0
+3/31/2024,Gabbana,14,Unrealized Carried Interest,-409
+3/31/2024,Gabbana,15,Fund Expenses,-116
+3/31/2024,Gabbana,16,Ending Capital Balance,166637
+3/31/2024,Peter Piper,1,Beginning Capital Balance,0
+3/31/2024,Peter Piper,2,Capital Calls,"330,000"
+3/31/2024,Peter Piper,5,Distributions (Principal),0
+3/31/2024,Peter Piper,6,Distributions (Income),0
+3/31/2024,Peter Piper,7,Interest Income,"8,688"
+3/31/2024,Peter Piper,8,Realized Gain / (Loss),0
+3/31/2024,Peter Piper,9,Unrealized Gain / (Loss),0
+3/31/2024,Peter Piper,10,Investment Expenses,-3409
+3/31/2024,Peter Piper,11,Management Fees,-956
+3/31/2024,Peter Piper,13,Realized Carried Interest,0
+3/31/2024,Peter Piper,14,Unrealized Carried Interest,-818
+3/31/2024,Peter Piper,15,Fund Expenses,-231
+3/31/2024,Peter Piper,16,Ending Capital Balance,333273
+6/30/2024,Red Rose,1,Beginning Capital Balance,"166,637"
+6/30/2024,Red Rose,2,Capital Calls,"60,000"
+6/30/2024,Red Rose,5,Distributions (Principal),0
+6/30/2024,Red Rose,6,Distributions (Income),"-1,238"
+6/30/2024,Red Rose,7,Interest Income,"7,728"
+6/30/2024,Red Rose,8,Realized Gain / (Loss),0
+6/30/2024,Red Rose,9,Unrealized Gain / (Loss),0
+6/30/2024,Red Rose,10,Investment Expenses,-257
+6/30/2024,Red Rose,11,Management Fees,-654
+6/30/2024,Red Rose,13,Realized Carried Interest,-310
+6/30/2024,Red Rose,14,Unrealized Carried Interest,-896
+6/30/2024,Red Rose,15,Fund Expenses,-291
+6/30/2024,Red Rose,16,Ending Capital Balance,230719
+6/30/2024,Berry Blues,1,Beginning Capital Balance,"333,273"
+6/30/2024,Berry Blues,2,Capital Calls,"120,000"
+6/30/2024,Berry Blues,5,Distributions (Principal),0
+6/30/2024,Berry Blues,6,Distributions (Income),"-2,476"
+6/30/2024,Berry Blues,7,Interest Income,"15,456"
+6/30/2024,Berry Blues,8,Realized Gain / (Loss),0
+6/30/2024,Berry Blues,9,Unrealized Gain / (Loss),0
+6/30/2024,Berry Blues,10,Investment Expenses,-514
+6/30/2024,Berry Blues,11,Management Fees,-1308
+6/30/2024,Berry Blues,13,Realized Carried Interest,-619
+6/30/2024,Berry Blues,14,Unrealized Carried Interest,"-1,792"
+6/30/2024,Berry Blues,15,Fund Expenses,-582
+6/30/2024,Berry Blues,16,Ending Capital Balance,"461,438"
+6/30/2024,Dolce,1,Beginning Capital Balance,"3,108,463"
+6/30/2024,Dolce,2,Capital Calls,0
+6/30/2024,Dolce,5,Distributions (Principal),"-16,094"
+6/30/2024,Dolce,6,Distributions (Income),"-81,826"
+6/30/2024,Dolce,7,Interest Income,"119,261"
+6/30/2024,Dolce,8,Realized Gain / (Loss),-422
+6/30/2024,Dolce,9,Unrealized Gain / (Loss),0
+6/30/2024,Dolce,10,Investment Expenses,-579
+6/30/2024,Dolce,11,Management Fees,-14866
+6/30/2024,Dolce,13,Realized Carried Interest,-20457
+6/30/2024,Dolce,14,Unrealized Carried Interest,"3,410"
+6/30/2024,Dolce,15,Fund Expenses,-1538
+6/30/2024,Dolce,16,Ending Capital Balance,3095352
+6/30/2024,Indiana,1,Beginning Capital Balance,"268,978,397"
+6/30/2024,Indiana,2,Capital Calls,0
+6/30/2024,Indiana,5,Distributions (Principal),-15123934
+6/30/2024,Indiana,6,Distributions (Income),-7226866
+6/30/2024,Indiana,7,Interest Income,9404211
+6/30/2024,Indiana,8,Realized Gain / (Loss),"-21,083"
+6/30/2024,Indiana,9,Unrealized Gain / (Loss),0
+6/30/2024,Indiana,10,Investment Expenses,"-45,979"
+6/30/2024,Indiana,11,Management Fees,-932497
+6/30/2024,Indiana,13,Realized Carried Interest,-1275329
+6/30/2024,Indiana,14,Unrealized Carried Interest,"233,435"
+6/30/2024,Indiana,15,Fund Expenses,-144706
+6/30/2024,Indiana,16,Ending Capital Balance,253845647
+6/30/2024,Breeze,1,Beginning Capital Balance,"106,725,519"
+6/30/2024,Breeze,2,Capital Calls,0
+6/30/2024,Breeze,5,Distributions (Principal),-644020
+6/30/2024,Breeze,6,Distributions (Income),-2891715
+6/30/2024,Breeze,7,Interest Income,3755841
+6/30/2024,Breeze,8,Realized Gain / (Loss),0
+6/30/2024,Breeze,9,Unrealized Gain / (Loss),0
+6/30/2024,Breeze,10,Investment Expenses,"-33,004"
+6/30/2024,Breeze,11,Management Fees,-382105
+6/30/2024,Breeze,13,Realized Carried Interest,"-510,303"
+6/30/2024,Breeze,14,Unrealized Carried Interest,"105,473"
+6/30/2024,Breeze,15,Fund Expenses,-57230
+6/30/2024,Breeze,16,Ending Capital Balance,106068458
+6/30/2024,Gabbana,1,Beginning Capital Balance,166637
+6/30/2024,Gabbana,2,Capital Calls,60000
+6/30/2024,Gabbana,5,Distributions (Principal),0
+6/30/2024,Gabbana,6,Distributions (Income),-1238
+6/30/2024,Gabbana,7,Interest Income,7728
+6/30/2024,Gabbana,8,Realized Gain / (Loss),0
+6/30/2024,Gabbana,9,Unrealized Gain / (Loss),0
+6/30/2024,Gabbana,10,Investment Expenses,-257
+6/30/2024,Gabbana,11,Management Fees,-654
+6/30/2024,Gabbana,13,Realized Carried Interest,-310
+6/30/2024,Gabbana,14,Unrealized Carried Interest,-896
+6/30/2024,Gabbana,15,Fund Expenses,-291
+6/30/2024,Gabbana,16,Ending Capital Balance,230719
+6/30/2024,Peter Piper,1,Beginning Capital Balance,333273
+6/30/2024,Peter Piper,2,Capital Calls,"120,000"
+6/30/2024,Peter Piper,5,Distributions (Principal),0
+6/30/2024,Peter Piper,6,Distributions (Income),"-2,476"
+6/30/2024,Peter Piper,7,Interest Income,15456
+6/30/2024,Peter Piper,8,Realized Gain / (Loss),0
+6/30/2024,Peter Piper,9,Unrealized Gain / (Loss),0
+6/30/2024,Peter Piper,10,Investment Expenses,-514
+6/30/2024,Peter Piper,11,Management Fees,"-1,308"
+6/30/2024,Peter Piper,13,Realized Carried Interest,-619
+6/30/2024,Peter Piper,14,Unrealized Carried Interest,"-1,792"
+6/30/2024,Peter Piper,15,Fund Expenses,-582
+6/30/2024,Peter Piper,16,Ending Capital Balance,461438
+9/30/2024,Red Rose,1,Beginning Capital Balance,230719
+9/30/2024,Red Rose,2,Capital Calls,"12,500"
+9/30/2024,Red Rose,5,Distributions (Principal),0
+9/30/2024,Red Rose,6,Distributions (Income),"-4,647"
+9/30/2024,Red Rose,7,Interest Income,"7,693"
+9/30/2024,Red Rose,8,Realized Gain / (Loss),0
+9/30/2024,Red Rose,9,Unrealized Gain / (Loss),0
+9/30/2024,Red Rose,10,Investment Expenses,-683
+9/30/2024,Red Rose,11,Management Fees,-796
+9/30/2024,Red Rose,13,Realized Carried Interest,"-1,162"
+9/30/2024,Red Rose,14,Unrealized Carried Interest,88
+9/30/2024,Red Rose,15,Fund Expenses,-126
+9/30/2024,Red Rose,16,Ending Capital Balance,243586
+9/30/2024,Berry Blues,1,Beginning Capital Balance,461438
+9/30/2024,Berry Blues,2,Capital Calls,"25,000"
+9/30/2024,Berry Blues,5,Distributions (Principal),0
+9/30/2024,Berry Blues,6,Distributions (Income),"-9,294"
+9/30/2024,Berry Blues,7,Interest Income,"15,387"
+9/30/2024,Berry Blues,8,Realized Gain / (Loss),0
+9/30/2024,Berry Blues,9,Unrealized Gain / (Loss),0
+9/30/2024,Berry Blues,10,Investment Expenses,"-1,367"
+9/30/2024,Berry Blues,11,Management Fees,-1593
+9/30/2024,Berry Blues,13,Realized Carried Interest,"-2,323"
+9/30/2024,Berry Blues,14,Unrealized Carried Interest,176
+9/30/2024,Berry Blues,15,Fund Expenses,-253
+9/30/2024,Berry Blues,16,Ending Capital Balance,487171
+9/30/2024,Dolce,1,Beginning Capital Balance,3095352
+9/30/2024,Dolce,2,Capital Calls,0
+9/30/2024,Dolce,5,Distributions (Principal),"-221,117"
+9/30/2024,Dolce,6,Distributions (Income),"-77,162"
+9/30/2024,Dolce,7,Interest Income,"119,584"
+9/30/2024,Dolce,8,Realized Gain / (Loss),0
+9/30/2024,Dolce,9,Unrealized Gain / (Loss),0
+9/30/2024,Dolce,10,Investment Expenses,-426
+9/30/2024,Dolce,11,Management Fees,-14989
+9/30/2024,Dolce,13,Realized Carried Interest,"-19,291"
+9/30/2024,Dolce,14,Unrealized Carried Interest,-153
+9/30/2024,Dolce,15,Fund Expenses,"-1,549"
+9/30/2024,Dolce,16,Ending Capital Balance,"2,880,250"
+9/30/2024,Indiana,1,Beginning Capital Balance,253845647
+9/30/2024,Indiana,2,Capital Calls,0
+9/30/2024,Indiana,5,Distributions (Principal),"-39,930,154"
+9/30/2024,Indiana,6,Distributions (Income),"-6,769,787"
+9/30/2024,Indiana,7,Interest Income,"9,045,759"
+9/30/2024,Indiana,8,Realized Gain / (Loss),0
+9/30/2024,Indiana,9,Unrealized Gain / (Loss),0
+9/30/2024,Indiana,10,Investment Expenses,"-34,294"
+9/30/2024,Indiana,11,Management Fees,"-889,829"
+9/30/2024,Indiana,13,Realized Carried Interest,-1194668
+9/30/2024,Indiana,14,Unrealized Carried Interest,"40,892"
+9/30/2024,Indiana,15,Fund Expenses,"-134,303"
+9/30/2024,Indiana,16,Ending Capital Balance,213979263
+9/30/2024,Breeze,1,Beginning Capital Balance,106068458
+9/30/2024,Breeze,2,Capital Calls,0
+9/30/2024,Breeze,5,Distributions (Principal),-18314743
+9/30/2024,Breeze,6,Distributions (Income),-2727507
+9/30/2024,Breeze,7,Interest Income,3827201
+9/30/2024,Breeze,8,Realized Gain / (Loss),0
+9/30/2024,Breeze,9,Unrealized Gain / (Loss),0
+9/30/2024,Breeze,10,Investment Expenses,"-19,428"
+9/30/2024,Breeze,11,Management Fees,"-384,277"
+9/30/2024,Breeze,13,Realized Carried Interest,-481325
+9/30/2024,Breeze,14,Unrealized Carried Interest,"-13,415"
+9/30/2024,Breeze,15,Fund Expenses,"-50,558"
+9/30/2024,Breeze,16,Ending Capital Balance,87904406
+9/30/2024,Gabbana,1,Beginning Capital Balance,230719
+9/30/2024,Gabbana,2,Capital Calls,12500
+9/30/2024,Gabbana,5,Distributions (Principal),0
+9/30/2024,Gabbana,6,Distributions (Income),-4647
+9/30/2024,Gabbana,7,Interest Income,"7,693"
+9/30/2024,Gabbana,8,Realized Gain / (Loss),0
+9/30/2024,Gabbana,9,Unrealized Gain / (Loss),0
+9/30/2024,Gabbana,10,Investment Expenses,-683
+9/30/2024,Gabbana,11,Management Fees,-796
+9/30/2024,Gabbana,13,Realized Carried Interest,-1162
+9/30/2024,Gabbana,14,Unrealized Carried Interest,88
+9/30/2024,Gabbana,15,Fund Expenses,-126
+9/30/2024,Gabbana,16,Ending Capital Balance,243586
+9/30/2024,Peter Piper,1,Beginning Capital Balance,461438
+9/30/2024,Peter Piper,2,Capital Calls,25000
+9/30/2024,Peter Piper,5,Distributions (Principal),0
+9/30/2024,Peter Piper,6,Distributions (Income),"-9,294"
+9/30/2024,Peter Piper,7,Interest Income,15387
+9/30/2024,Peter Piper,8,Realized Gain / (Loss),0
+9/30/2024,Peter Piper,9,Unrealized Gain / (Loss),0
+9/30/2024,Peter Piper,10,Investment Expenses,"-1,367"
+9/30/2024,Peter Piper,11,Management Fees,"-1,593"
+9/30/2024,Peter Piper,13,Realized Carried Interest,-2323
+9/30/2024,Peter Piper,14,Unrealized Carried Interest,176
+9/30/2024,Peter Piper,15,Fund Expenses,-253
+9/30/2024,Peter Piper,16,Ending Capital Balance,487171
+12/31/2024,Berry Blues,1,Beginning Capital Balance,487171.38
+12/31/2024,Berry Blues,2,Capital Calls,"25,000"
+12/31/2024,Berry Blues,5,Distributions (Principal),0
+12/31/2024,Berry Blues,6,Distributions (Income),"-8,406"
+12/31/2024,Berry Blues,7,Interest Income,18315.58
+12/31/2024,Berry Blues,8,Realized Gain / (Loss),31.16
+12/31/2024,Berry Blues,9,Unrealized Gain / (Loss),0
+12/31/2024,Berry Blues,10,Investment Expenses,352
+12/31/2024,Berry Blues,11,Management Fees,-1956.63
+12/31/2024,Berry Blues,13,Realized Carried Interest,"-2,101"
+12/31/2024,Berry Blues,14,Unrealized Carried Interest,-913
+12/31/2024,Berry Blues,15,Fund Expenses,"-1,415"
+12/31/2024,Berry Blues,16,Ending Capital Balance,516077.29
+12/31/2024,Peter Piper,1,Beginning Capital Balance,487171.38
+12/31/2024,Peter Piper,2,Capital Calls,25000
+12/31/2024,Peter Piper,5,Distributions (Principal),0
+12/31/2024,Peter Piper,6,Distributions (Income),"-8,406"
+12/31/2024,Peter Piper,7,Interest Income,18315.58
+12/31/2024,Peter Piper,8,Realized Gain / (Loss),31
+12/31/2024,Peter Piper,9,Unrealized Gain / (Loss),0
+12/31/2024,Peter Piper,10,Investment Expenses,352
+12/31/2024,Peter Piper,11,Management Fees,-1956.63
+12/31/2024,Peter Piper,13,Realized Carried Interest,-2101.46
+12/31/2024,Peter Piper,14,Unrealized Carried Interest,-913
+12/31/2024,Peter Piper,15,Fund Expenses,"-1,415"
+12/31/2024,Peter Piper,16,Ending Capital Balance,"516,077"
+12/31/2024,Dolce,1,Beginning Capital Balance,2880249.86
+12/31/2024,Dolce,2,Capital Calls,0
+12/31/2024,Dolce,5,Distributions (Principal),"-231,768"
+12/31/2024,Dolce,6,Distributions (Income),"-70,969"
+12/31/2024,Dolce,7,Interest Income,"107,390"
+12/31/2024,Dolce,8,Realized Gain / (Loss),236
+12/31/2024,Dolce,9,Unrealized Gain / (Loss),"-2,163"
+12/31/2024,Dolce,10,Investment Expenses,"-1,287"
+12/31/2024,Dolce,11,Management Fees,"-13,779"
+12/31/2024,Dolce,13,Realized Carried Interest,-17742.22
+12/31/2024,Dolce,14,Unrealized Carried Interest,"-5,034"
+12/31/2024,Dolce,15,Fund Expenses,"-1,385"
+12/31/2024,Dolce,16,Ending Capital Balance,"2,643,748"
+12/31/2024,Indiana,1,Beginning Capital Balance,213979263.5
+12/31/2024,Indiana,2,Capital Calls,0
+12/31/2024,Indiana,5,Distributions (Principal),"-61,552,234"
+12/31/2024,Indiana,6,Distributions (Income),"-5,986,950"
+12/31/2024,Indiana,7,Interest Income,"7,516,980"
+12/31/2024,Indiana,8,Realized Gain / (Loss),"11,801"
+12/31/2024,Indiana,9,Unrealized Gain / (Loss),"-243,804"
+12/31/2024,Indiana,10,Investment Expenses,"-64,755"
+12/31/2024,Indiana,11,Management Fees,"-757,078"
+12/31/2024,Indiana,13,Realized Carried Interest,-1056520.55
+12/31/2024,Indiana,14,Unrealized Carried Interest,"-162,335"
+12/31/2024,Indiana,15,Fund Expenses,"-128,013"
+12/31/2024,Indiana,16,Ending Capital Balance,"151,556,356"
+12/31/2024,Breeze,1,Beginning Capital Balance,87904406.11
+12/31/2024,Breeze,2,Capital Calls,0
+12/31/2024,Breeze,5,Distributions (Principal),"-10,502,687"
+12/31/2024,Breeze,6,Distributions (Income),"-2,158,548"
+12/31/2024,Breeze,7,Interest Income,"2,796,303"
+12/31/2024,Breeze,8,Realized Gain / (Loss),0
+12/31/2024,Breeze,9,Unrealized Gain / (Loss),"-2,005,765"
+12/31/2024,Breeze,10,Investment Expenses,"-74,883"
+12/31/2024,Breeze,11,Management Fees,"-311,972"
+12/31/2024,Breeze,13,Realized Carried Interest,"-380,920"
+12/31/2024,Breeze,14,Unrealized Carried Interest,222648.56
+12/31/2024,Breeze,15,Fund Expenses,"-74,299"
+12/31/2024,Breeze,16,Ending Capital Balance,"75,414,284"
+12/31/2024,Gabbana,1,Beginning Capital Balance,243585.69
+12/31/2024,Gabbana,2,Capital Calls,12500
+12/31/2024,Gabbana,5,Distributions (Principal),0
+12/31/2024,Gabbana,6,Distributions (Income),-4202.91
+12/31/2024,Gabbana,7,Interest Income,"9,158"
+12/31/2024,Gabbana,8,Realized Gain / (Loss),15.58
+12/31/2024,Gabbana,9,Unrealized Gain / (Loss),0
+12/31/2024,Gabbana,10,Investment Expenses,176
+12/31/2024,Gabbana,11,Management Fees,-978
+12/31/2024,Gabbana,13,Realized Carried Interest,"-1,051"
+12/31/2024,Gabbana,14,Unrealized Carried Interest,-456.64
+12/31/2024,Gabbana,15,Fund Expenses,-708
+12/31/2024,Gabbana,16,Ending Capital Balance,"258,039"
+12/31/2024,Red Rose,1,Beginning Capital Balance,243585.69
+12/31/2024,Red Rose,2,Capital Calls,12500
+12/31/2024,Red Rose,5,Distributions (Principal),0
+12/31/2024,Red Rose,6,Distributions (Income),"-4,203"
+12/31/2024,Red Rose,7,Interest Income,"9,158"
+12/31/2024,Red Rose,8,Realized Gain / (Loss),15.58
+12/31/2024,Red Rose,9,Unrealized Gain / (Loss),0
+12/31/2024,Red Rose,10,Investment Expenses,176
+12/31/2024,Red Rose,11,Management Fees,-978
+12/31/2024,Red Rose,13,Realized Carried Interest,"-1,051"
+12/31/2024,Red Rose,14,Unrealized Carried Interest,-456.64
+12/31/2024,Red Rose,15,Fund Expenses,-708
+12/31/2024,Red Rose,16,Ending Capital Balance,"258,039"
+12/31/2024,Magic,1,Beginning Capital Balance,0
+12/31/2024,Magic,2,Capital Calls,0
+12/31/2024,Magic,5,Distributions (Principal),-57942.11
+12/31/2024,Magic,6,Distributions (Income),"-25,925"
+12/31/2024,Magic,3,Transfers,"728,941"
+12/31/2024,Magic,7,Interest Income,26847.44
+12/31/2024,Magic,8,Realized Gain / (Loss),59
+12/31/2024,Magic,9,Unrealized Gain / (Loss),-541
+12/31/2024,Magic,10,Investment Expenses,-322
+12/31/2024,Magic,11,Management Fees,0
+12/31/2024,Magic,13,Realized Carried Interest,0
+12/31/2024,Magic,14,Unrealized Carried Interest,0
+12/31/2024,Magic,15,Fund Expenses,-346
+12/31/2024,Magic,16,Ending Capital Balance,670771.26
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
