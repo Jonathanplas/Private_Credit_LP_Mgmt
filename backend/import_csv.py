@@ -145,20 +145,48 @@ def load_csv_to_db():
                 for col in date_columns:
                     df = clean_column(df, col, 'clean_date')
                 
-                # Clean amount column - note we use 'amount' not 'Amount' since columns are already renamed
+                # Clean amount column
                 df['amount'] = pd.to_numeric(df['amount'].str.replace(',', ''), errors='coerce')
                 
-                # For debugging, print sample of data
-                print("\nSample of tbLedger data:")
-                print(df[["amount", "sub_activity"]].head())
+                # Print detailed debugging information
+                print("\nFirst 5 rows of tbLedger data:")
+                debug_columns = ["entry_date", "activity_date", "effective_date", "activity", 
+                                "sub_activity", "amount", "entity_from", "entity_to", 
+                                "related_entity", "related_fund"]
+                print(df[debug_columns].head().to_string())
                 
-                # Add records to session
+                # Convert DataFrame to records and clean them before adding to session
+                records = []
                 for _, row in df.iterrows():
-                    session.add(tbLedger(**row.to_dict()))
+                    clean_record = {
+                        'entry_date': row['entry_date'],
+                        'activity_date': row['activity_date'],
+                        'effective_date': row['effective_date'],
+                        'activity': str(row['activity']),
+                        'sub_activity': str(row['sub_activity']) if pd.notna(row['sub_activity']) else None,
+                        'amount': float(row['amount']) if pd.notna(row['amount']) else None,
+                        'entity_from': str(row['entity_from']),
+                        'entity_to': str(row['entity_to']),
+                        'related_entity': str(row['related_entity']),
+                        'related_fund': str(row['related_fund'])
+                    }
+                    records.append(clean_record)
+                
+                # Print first record for verification
+                print("\nFirst clean record:")
+                print(records[0])
+                
+                # Add clean records to session
+                for record in records:
+                    session.add(tbLedger(**record))
+                
+                # Commit the records
+                session.commit()
+                print(f"Loaded data into {table_name}.")
                 
                 # Skip the general record creation loop
                 continue
-            
+                        
             for _, row in df.iterrows():
                 if table_name == "tbLPLookup":
                     # Check if the record already exists

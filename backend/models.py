@@ -52,7 +52,7 @@ class tbLedger(Base):
     activity_date = Column(Date)  # Matches 'Activity Date' in tbLedger.csv
     effective_date = Column(Date)  # Matches 'Effective Date' in tbLedger.csv
     activity = Column(String)  # Matches 'Activity' in tbLedger.csv
-    sub_activity = Column(String)  # Matches 'Sub Activity' in tbLedger.csv
+    sub_activity = Column(String, nullable=True)  # Matches 'Sub Activity' in tbLedger.csv
     amount = Column(Float)  # Matches 'Amount' in tbLedger.csv
     entity_from = Column(String)  # Matches 'Entity From' in tbLedger.csv
     entity_to = Column(String)  # Matches 'Entity To' in tbLedger.csv
