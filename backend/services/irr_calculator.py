@@ -1,4 +1,3 @@
-# filepath: backend/services/irr_calculator.py
 from scipy.optimize import newton
 
 def xirr(cashflows):
