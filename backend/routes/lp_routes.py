@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from ..db import SessionLocal
 from ..models import tbLPLookup, tbLPFund
-from ..services.metrics_calculator import calculate_fund_metrics
+from ..services.metrics_calculator import calculate_fund_metrics, calculate_lp_totals, calculate_lp_irr, get_pcap_report_date
 from datetime import datetime
 
 router = APIRouter()
@@ -45,6 +45,11 @@ def get_lp_details(short_name: str, report_date: str, db: Session = Depends(get_
             "metrics": metrics
         })
     
+    # Calculate LP totals and IRR
+    totals = calculate_lp_totals(db, short_name, report_date)
+    irr = calculate_lp_irr(db, short_name, report_date)
+    pcap_report_date = get_pcap_report_date(db, report_date)
+    
     return {
         "lp_details": {
             "short_name": lp.short_name,
@@ -53,5 +58,8 @@ def get_lp_details(short_name: str, report_date: str, db: Session = Depends(get_
             "effective_date": lp.effective_date,
             "inactive_date": lp.inactive_date
         },
-        "funds": funds_with_metrics
+        "funds": funds_with_metrics,
+        "totals": totals,
+        "irr": irr,
+        "pcap_report_date": pcap_report_date
     }
