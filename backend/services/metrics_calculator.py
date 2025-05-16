@@ -20,38 +20,62 @@ def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, repo
     )
     
     # Total Commitment - sum of all 'New Commitment' transactions
-    total_commitment = base_query.filter(
+    commitment_transactions = base_query.filter(
         tbLedger.sub_activity == 'New Commitment'
-    ).with_entities(tbLedger.amount).all()
-    total_commitment = sum(amount[0] for amount in total_commitment) if total_commitment else 0
-
+    ).all()
+    total_commitment = sum(t.amount for t in commitment_transactions) if commitment_transactions else 0
+    
     # Total Capital Called - sum of all Capital Call transactions
-    total_capital_called = base_query.filter(
+    capital_call_transactions = base_query.filter(
         tbLedger.activity == 'Capital Call'
-    ).with_entities(tbLedger.amount).all()
-    total_capital_called = sum(amount[0] for amount in total_capital_called) if total_capital_called else 0
+    ).all()
+    total_capital_called = sum(t.amount for t in capital_call_transactions) if capital_call_transactions else 0
 
     # Capital Distributions
-    capital_distributions = base_query.filter(
+    capital_distribution_transactions = base_query.filter(
         and_(
             tbLedger.activity == 'LP Distribution',
             tbLedger.sub_activity == 'Capital Distribution'
         )
-    ).with_entities(tbLedger.amount).all()
-    total_capital_distribution = sum(amount[0] for amount in capital_distributions) if capital_distributions else 0
+    ).all()
+    total_capital_distribution = sum(t.amount for t in capital_distribution_transactions) if capital_distribution_transactions else 0
 
     # Income Distributions
-    income_distributions = base_query.filter(
+    income_distribution_transactions = base_query.filter(
         and_(
             tbLedger.activity == 'LP Distribution',
             tbLedger.sub_activity == 'Income Distribution'
         )
-    ).with_entities(tbLedger.amount).all()
-    total_income_distribution = sum(amount[0] for amount in income_distributions) if income_distributions else 0
+    ).all()
+    total_income_distribution = sum(t.amount for t in income_distribution_transactions) if income_distribution_transactions else 0
 
     # Calculate remaining metrics
     total_distribution = total_capital_distribution + total_income_distribution
     remaining_capital = total_capital_called - total_capital_distribution
+
+    def transactions_to_dict(transactions):
+        return [
+            {
+                "effective_date": t.effective_date.strftime('%Y-%m-%d'),
+                "activity": t.activity,
+                "sub_activity": t.sub_activity,
+                "amount": t.amount,
+                "entity_from": t.entity_from,
+                "entity_to": t.entity_to
+            }
+            for t in transactions
+        ]
+
+    # Combine transactions for total distribution and remaining capital
+    all_distribution_transactions = sorted(
+        capital_distribution_transactions + income_distribution_transactions,
+        key=lambda x: x.effective_date
+    )
+
+    remaining_capital_transactions = sorted(
+        capital_call_transactions + capital_distribution_transactions,
+        key=lambda x: x.effective_date
+    )
 
     return {
         "total_commitment": total_commitment,
@@ -59,7 +83,15 @@ def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, repo
         "total_capital_distribution": total_capital_distribution,
         "total_income_distribution": total_income_distribution,
         "total_distribution": total_distribution,
-        "remaining_capital": remaining_capital
+        "remaining_capital": remaining_capital,
+        "raw_data": {
+            "commitment_transactions": transactions_to_dict(commitment_transactions),
+            "capital_call_transactions": transactions_to_dict(capital_call_transactions),
+            "capital_distribution_transactions": transactions_to_dict(capital_distribution_transactions),
+            "income_distribution_transactions": transactions_to_dict(income_distribution_transactions),
+            "total_distribution_transactions": transactions_to_dict(all_distribution_transactions),
+            "remaining_capital_transactions": transactions_to_dict(remaining_capital_transactions)
+        }
     }
 
 def calculate_lp_totals(db: Session, lp_short_name: str, report_date: str):
@@ -73,16 +105,34 @@ def calculate_lp_totals(db: Session, lp_short_name: str, report_date: str):
         "total_capital_distribution": 0,
         "total_income_distribution": 0,
         "total_distribution": 0,
-        "remaining_capital": 0
+        "remaining_capital": 0,
+        "raw_data": {
+            "commitment_transactions": [],
+            "capital_call_transactions": [],
+            "capital_distribution_transactions": [],
+            "income_distribution_transactions": [],
+            "total_distribution_transactions": [],
+            "remaining_capital_transactions": []
+        }
     }
     
     # Sum up metrics across all funds
     for fund in funds:
-        metrics = calculate_fund_metrics(db, lp_short_name, fund.fund_name, report_date)
-        for key in totals:
-            totals[key] += metrics[key]
+        fund_metrics = calculate_fund_metrics(db, lp_short_name, fund.fund_name, report_date)
+        for key in ["total_commitment", "total_capital_called", "total_capital_distribution", 
+                   "total_income_distribution", "total_distribution", "remaining_capital"]:
+            totals[key] += fund_metrics[key]
+        
+        # Combine raw data
+        for key in totals["raw_data"]:
+            totals["raw_data"][key].extend(fund_metrics["raw_data"][key])
+    
+    # Sort combined transactions by date
+    for key in totals["raw_data"]:
+        totals["raw_data"][key].sort(key=lambda x: x["effective_date"])
     
     return totals
+
 def get_pcap_report_date(db: Session, report_date: str):
     """Get the latest PCAP report date before or equal to the given report date"""
     report_date = datetime.strptime(report_date, '%Y-%m-%d').date()
