@@ -133,13 +133,19 @@ Implementation details:
   - Ending Capital Balance from tbPCAP as of PCAP Report Date
     - Specifically retrieves only the "Ending Capital Balance" field value from tbPCAP
     - Uses the most recent entry when multiple entries exist (sorted by field_num)
+- Special handling for LPs without traditional capital calls (fallback mechanism):
+  - Priority 1: Capital Call transactions from tbLedger (standard path)
+  - Priority 2: When no Capital Call transactions exist in tbLedger, check for "Transfers" in tbPCAP
+  - Priority 3: When no Transfers exist, check for "Capital Calls" field in tbPCAP
+  - This approach ensures all capital contributions are accounted for regardless of recording method
+  - When no explicit commitments exist, the system uses these alternative sources to determine commitment amount
 - Calculated at the aggregate LP level across all funds
 - Implementation:
   - XIRR formula: `0 = Σ [ CF_i / (1 + IRR)^(d_i/365) ]`
   - Solver: SciPy's Newton method implementation
   - Backend function: `calculate_lp_irr` in metrics_calculator.py
 - Cash Flow Convention:
-  - Capital calls are recorded as negative values (cash outflow from investor perspective)
+  - Capital calls, transfers, and PCAP capital calls are recorded as negative values (cash outflow from investor perspective)
   - Distributions and ending balances are recorded as positive values (cash inflow to investor)
   - This convention matches standard finance practice and Excel's XIRR function
 

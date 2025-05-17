@@ -131,6 +131,51 @@ def get_irr_cash_flows(short_name: str, report_date: str, db: Session = Depends(
                 "entity_to": call.entity_to,
                 "related_fund": call.related_fund
             })
+            
+        # Check if we have no capital calls from tbLedger
+        if len(cash_flows) == 0:
+            # First try transfers
+            transfers_record = db.query(tbPCAP)\
+                .filter(
+                    and_(
+                        tbPCAP.lp_short_name == short_name,
+                        tbPCAP.pcap_date == pcap_date,
+                        tbPCAP.field == "Transfers"
+                    )
+                ).first()
+            
+            if transfers_record and transfers_record.amount > 0:
+                # Use pcap_date as the effective date for the transfer
+                cash_flows.append({
+                    "effective_date": pcap_date.strftime('%Y-%m-%d'),
+                    "activity": "Transfer (Capital Contribution)",
+                    "sub_activity": "Capital Contribution",
+                    "amount": -transfers_record.amount,
+                    "entity_from": "",
+                    "entity_to": "",
+                    "related_fund": "All Funds"
+                })
+            else:
+                # If no transfers, try Capital Calls from tbPCAP
+                pcap_capital_calls = db.query(tbPCAP)\
+                    .filter(
+                        and_(
+                            tbPCAP.lp_short_name == short_name,
+                            tbPCAP.pcap_date == pcap_date,
+                            tbPCAP.field == "Capital Calls"
+                        )
+                    ).first()
+                
+                if pcap_capital_calls and pcap_capital_calls.amount > 0:
+                    cash_flows.append({
+                        "effective_date": pcap_date.strftime('%Y-%m-%d'),
+                        "activity": "Capital Call (from PCAP)",
+                        "sub_activity": "Capital Contribution",
+                        "amount": -pcap_capital_calls.amount,
+                        "entity_from": "",
+                        "entity_to": "",
+                        "related_fund": "All Funds"
+                    })
         
         # Add Distributions (positive cash flows)
         distributions = db.query(tbLedger)\

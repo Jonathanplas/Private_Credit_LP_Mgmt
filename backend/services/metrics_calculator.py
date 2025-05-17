@@ -13,6 +13,9 @@ def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, repo
     # Convert report_date string to datetime
     report_date = datetime.strptime(report_date, '%Y-%m-%d').date()
     
+    # Get PCAP report date (most recent PCAP date before or equal to report_date)
+    pcap_date = get_pcap_report_date(db, report_date.strftime('%Y-%m-%d'))
+    
     # Base query for all relevant transactions
     base_query = db.query(tbLedger).filter(
         and_(
@@ -33,7 +36,45 @@ def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, repo
         tbLedger.activity == 'Capital Call'
     ).all()
     total_capital_called = sum(t.amount for t in capital_call_transactions) if capital_call_transactions else 0
-
+    
+    # Check if we have no capital calls in tbLedger
+    if total_capital_called == 0 and pcap_date:
+        # First, check for Transfers in tbPCAP (this was our previous solution)
+        transfers = db.query(tbPCAP)\
+            .filter(
+                and_(
+                    tbPCAP.lp_short_name == lp_short_name,
+                    tbPCAP.pcap_date == pcap_date,
+                    tbPCAP.field == "Transfers"
+                )
+            ).first()
+        
+        if transfers and transfers.amount > 0:
+            # We found transfers - use as capital calls
+            total_capital_called = transfers.amount
+            
+            # If there were no commitment transactions but we have transfers, use transfers amount as commitment
+            if total_commitment == 0:
+                total_commitment = transfers.amount
+        else:
+            # If no transfers found, check for Capital Calls in tbPCAP
+            pcap_capital_calls = db.query(tbPCAP)\
+                .filter(
+                    and_(
+                        tbPCAP.lp_short_name == lp_short_name,
+                        tbPCAP.pcap_date == pcap_date,
+                        tbPCAP.field == "Capital Calls"
+                    )
+                ).first()
+            
+            if pcap_capital_calls and pcap_capital_calls.amount > 0:
+                # We found capital calls in PCAP - use this amount
+                total_capital_called = pcap_capital_calls.amount
+                
+                # If there were no commitment transactions but we have capital calls from PCAP, use this amount
+                if total_commitment == 0:
+                    total_commitment = pcap_capital_calls.amount
+    
     # Capital Distributions
     capital_distribution_transactions = base_query.filter(
         and_(
@@ -172,6 +213,37 @@ def calculate_lp_irr(db: Session, lp_short_name: str, report_date: str):
     for call in calls:
         cash_flows.append((call.effective_date, -call.amount))
     
+    # Check if we have no capital calls from tbLedger
+    if len(cash_flows) == 0:
+        # First try transfers
+        transfers_record = db.query(tbPCAP)\
+            .filter(
+                and_(
+                    tbPCAP.lp_short_name == lp_short_name,
+                    tbPCAP.pcap_date == pcap_date,
+                    tbPCAP.field == "Transfers"
+                )
+            ).first()
+        
+        if transfers_record and transfers_record.amount > 0:
+            # Use pcap_date as the effective date for the transfer
+            # We treat transfers as capital calls (negative cash flow from investor perspective)
+            cash_flows.append((pcap_date, -transfers_record.amount))
+        else:
+            # If no transfers, try Capital Calls from tbPCAP
+            pcap_capital_calls = db.query(tbPCAP)\
+                .filter(
+                    and_(
+                        tbPCAP.lp_short_name == lp_short_name,
+                        tbPCAP.pcap_date == pcap_date,
+                        tbPCAP.field == "Capital Calls"
+                    )
+                ).first()
+            
+            if pcap_capital_calls and pcap_capital_calls.amount > 0:
+                # Use pcap_date as the effective date for the capital calls
+                cash_flows.append((pcap_date, -pcap_capital_calls.amount))
+    
     # Add Distributions (positive cash flows)
     distributions = db.query(tbLedger)\
         .filter(
@@ -257,6 +329,23 @@ def export_irr_cash_flows_to_csv(db: Session, output_file="irr_cash_flows.csv"):
             for call in calls:
                 cash_flows.append((call.effective_date, -call.amount))
                 cash_flow_descriptions.append(f"Capital Call - {call.sub_activity}")
+            
+            # Check if we have no capital calls but we do have transfers in PCAP
+            if len(cash_flows) == 0:
+                transfers_record = db.query(tbPCAP)\
+                    .filter(
+                        and_(
+                            tbPCAP.lp_short_name == lp_name,
+                            tbPCAP.pcap_date == pcap_date,
+                            tbPCAP.field == "Transfers"
+                        )
+                    ).first()
+                
+                if transfers_record and transfers_record.amount > 0:
+                    # Use pcap_date as the effective date for the transfer
+                    # We treat transfers as capital calls (negative cash flow from investor perspective)
+                    cash_flows.append((pcap_date, -transfers_record.amount))
+                    cash_flow_descriptions.append("Transfer (Capital Contribution)")
             
             # Add Distributions (positive cash flows)
             distributions = db.query(tbLedger)\
