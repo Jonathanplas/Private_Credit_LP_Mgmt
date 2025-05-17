@@ -37,6 +37,26 @@ The application follows a modern client-server architecture:
 
 ## Getting Started
 
+### Single Command Launch
+
+The simplest way to run the entire application is to use the included launcher script:
+
+```bash
+# From the project root directory
+./run.sh
+```
+
+This script:
+- Automatically sets up the Python virtual environment if needed
+- Starts the backend server at http://localhost:8000
+- Starts the frontend development server at http://localhost:3000
+- Provides clear status information for both services
+- Handles proper shutdown of all components with a single Ctrl+C
+
+### Manual Setup
+
+If you prefer to run components separately:
+
 1. Clone the repository
 2. Set up the backend:
    ```bash

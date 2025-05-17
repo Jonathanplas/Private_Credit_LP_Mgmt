@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.db import engine, Base
-from backend.routes import lp_routes
+from .db import engine, Base
+from .routes import lp_routes
 
 app = FastAPI()
 
