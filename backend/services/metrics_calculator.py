@@ -3,6 +3,8 @@ from sqlalchemy import and_, func
 # Change from relative to absolute imports
 from backend.models import tbLedger, tbLPFund, tbPCAP
 from datetime import datetime
+import csv
+import os
 from backend.services.irr_calculator import xirr
 
 def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, report_date: str):
@@ -203,3 +205,104 @@ def calculate_lp_irr(db: Session, lp_short_name: str, report_date: str):
             return None
     
     return None
+
+def export_irr_cash_flows_to_csv(db: Session, output_file="irr_cash_flows.csv"):
+    """
+    Export all LP cash flows used for IRR calculations to a CSV file.
+    This helps diagnose issues with IRR calculations by making the data transparent.
+    """
+    # Get all LPs
+    lps = db.query(tbLPFund.lp_short_name).distinct().all()
+    lp_names = [lp[0] for lp in lps]
+    
+    # Get current date as report date
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    
+    # Prepare CSV file
+    with open(output_file, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        
+        # Write header
+        writer.writerow([
+            'LP Name', 'PCAP Date', 'Cash Flow Date', 'Description', 
+            'Amount', 'Calculated IRR'
+        ])
+        
+        # For each LP, get cash flows and write to CSV
+        for lp_name in lp_names:
+            # Get PCAP report date
+            pcap_date = get_pcap_report_date(db, current_date)
+            if not pcap_date:
+                continue
+                
+            # Get all relevant cash flows
+            cash_flows = []
+            cash_flow_descriptions = []  # To store descriptions for CSV
+            
+            # Add Capital Calls (negative cash flows)
+            calls = db.query(tbLedger)\
+                .filter(
+                    and_(
+                        tbLedger.related_entity == lp_name,
+                        tbLedger.activity == 'Capital Call',
+                        tbLedger.effective_date <= pcap_date
+                    )
+                ).all()
+            
+            for call in calls:
+                cash_flows.append((call.effective_date, -call.amount))
+                cash_flow_descriptions.append(f"Capital Call - {call.sub_activity}")
+            
+            # Add Distributions (positive cash flows)
+            distributions = db.query(tbLedger)\
+                .filter(
+                    and_(
+                        tbLedger.related_entity == lp_name,
+                        tbLedger.activity == 'LP Distribution',
+                        tbLedger.effective_date <= pcap_date
+                    )
+                ).all()
+            
+            for dist in distributions:
+                cash_flows.append((dist.effective_date, dist.amount))
+                cash_flow_descriptions.append(f"Distribution - {dist.sub_activity}")
+            
+            # Add ending balance from PCAP
+            ending_balance = db.query(func.sum(tbPCAP.amount))\
+                .filter(
+                    and_(
+                        tbPCAP.lp_short_name == lp_name,
+                        tbPCAP.pcap_date == pcap_date
+                    )
+                ).scalar()
+            
+            if ending_balance:
+                cash_flows.append((pcap_date, ending_balance))
+                cash_flow_descriptions.append("PCAP Ending Balance")
+            
+            # Calculate IRR if we have cash flows
+            irr_value = None
+            if cash_flows:
+                try:
+                    irr_value = xirr(cash_flows)
+                except Exception as e:
+                    irr_value = f"Error: {str(e)}"
+            
+            # Write cash flows to CSV
+            for i, ((date, amount), description) in enumerate(zip(cash_flows, cash_flow_descriptions)):
+                # Only include IRR in the last row for this LP
+                irr_to_write = irr_value if i == len(cash_flows) - 1 else ""
+                
+                writer.writerow([
+                    lp_name,
+                    pcap_date.strftime('%Y-%m-%d'),
+                    date.strftime('%Y-%m-%d'),
+                    description,
+                    amount,
+                    irr_to_write
+                ])
+            
+            # Add empty row between LPs for readability
+            writer.writerow([])
+    
+    return os.path.abspath(output_file)

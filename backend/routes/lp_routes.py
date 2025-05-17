@@ -1,9 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import and_, func
 from backend.db import SessionLocal
-from backend.models import tbLPLookup, tbLPFund
-from backend.services.metrics_calculator import calculate_fund_metrics, calculate_lp_totals, calculate_lp_irr, get_pcap_report_date
+from backend.models import tbLPLookup, tbLPFund, tbLedger, tbPCAP
+from backend.services.metrics_calculator import (
+    calculate_fund_metrics, calculate_lp_totals, 
+    calculate_lp_irr, get_pcap_report_date, 
+    export_irr_cash_flows_to_csv
+)
 from datetime import datetime
+from backend.services.irr_calculator import xirr  # Import xirr from our custom implementation
+from fastapi.responses import FileResponse
+import os
 
 router = APIRouter()
 
@@ -63,3 +71,123 @@ def get_lp_details(short_name: str, report_date: str, db: Session = Depends(get_
         "irr": irr,
         "pcap_report_date": pcap_report_date
     }
+
+@router.get("/api/export-irr-cash-flows")
+def export_irr_data(db: Session = Depends(get_db)):
+    """
+    Export all LP cash flows used for IRR calculations to a CSV file.
+    This helps diagnose issues with IRR calculations.
+    """
+    try:
+        # Create a timestamped filename to avoid overwriting previous exports
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        output_file = f"irr_cash_flows_{timestamp}.csv"
+        
+        # Generate the CSV file
+        file_path = export_irr_cash_flows_to_csv(db, output_file)
+        
+        # Return the file as a downloadable response
+        return FileResponse(
+            path=file_path,
+            filename=output_file,
+            media_type="text/csv",
+            headers={"Content-Disposition": f"attachment; filename={output_file}"}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to export IRR data: {str(e)}")
+
+@router.get("/api/lp/{short_name}/irr-cash-flows")
+def get_irr_cash_flows(short_name: str, report_date: str, db: Session = Depends(get_db)):
+    """
+    Get IRR calculation cash flows for a specific LP.
+    This helps users understand and validate IRR calculations.
+    """
+    try:
+        # Get PCAP report date
+        pcap_date = get_pcap_report_date(db, report_date)
+        if not pcap_date:
+            return {"cash_flows": [], "irr": None, "pcap_date": None}
+            
+        # Get all relevant cash flows
+        cash_flows = []
+        
+        # Add Capital Calls (negative cash flows)
+        calls = db.query(tbLedger)\
+            .filter(
+                and_(
+                    tbLedger.related_entity == short_name,
+                    tbLedger.activity == 'Capital Call',
+                    tbLedger.effective_date <= pcap_date
+                )
+            ).all()
+        
+        for call in calls:
+            cash_flows.append({
+                "effective_date": call.effective_date.strftime('%Y-%m-%d'),
+                "activity": "Capital Call",
+                "sub_activity": call.sub_activity,
+                "amount": -call.amount,
+                "entity_from": call.entity_from,
+                "entity_to": call.entity_to,
+                "related_fund": call.related_fund
+            })
+        
+        # Add Distributions (positive cash flows)
+        distributions = db.query(tbLedger)\
+            .filter(
+                and_(
+                    tbLedger.related_entity == short_name,
+                    tbLedger.activity == 'LP Distribution',
+                    tbLedger.effective_date <= pcap_date
+                )
+            ).all()
+        
+        for dist in distributions:
+            cash_flows.append({
+                "effective_date": dist.effective_date.strftime('%Y-%m-%d'),
+                "activity": "LP Distribution",
+                "sub_activity": dist.sub_activity,
+                "amount": dist.amount,
+                "entity_from": dist.entity_from,
+                "entity_to": dist.entity_to,
+                "related_fund": dist.related_fund
+            })
+        
+        # Add ending balance from PCAP
+        ending_balance = db.query(func.sum(tbPCAP.amount))\
+            .filter(
+                and_(
+                    tbPCAP.lp_short_name == short_name,
+                    tbPCAP.pcap_date == pcap_date
+                )
+            ).scalar()
+        
+        if ending_balance:
+            cash_flows.append({
+                "effective_date": pcap_date.strftime('%Y-%m-%d'),
+                "activity": "PCAP Ending Balance",
+                "sub_activity": "NAV",
+                "amount": ending_balance,
+                "entity_from": "",
+                "entity_to": "",
+                "related_fund": "All Funds"
+            })
+        
+        # Calculate IRR
+        irr_value = None
+        xirr_cashflows = []
+        try:
+            xirr_cashflows = [(datetime.strptime(cf["effective_date"], '%Y-%m-%d').date(), cf["amount"]) 
+                              for cf in cash_flows]
+            if xirr_cashflows:
+                irr_value = xirr(xirr_cashflows)
+        except Exception as e:
+            irr_value = None
+        
+        return {
+            "cash_flows": cash_flows,
+            "irr": irr_value,
+            "pcap_date": pcap_date.strftime('%Y-%m-%d') if pcap_date else None
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get IRR cash flows: {str(e)}")
