@@ -10,6 +10,7 @@ A web-based application for managing and viewing Limited Partner (LP) investment
 - [Project Structure](#project-structure)
 - [Features Implementation](#features-implementation)
 - [Data Transparency](#data-transparency)
+- [SQL Queries for Common Operations](#sql-queries-for-common-operations)
 
 ## Architecture Overview
 
@@ -171,3 +172,44 @@ This approach ensures that users can:
 - Verify calculations independently
 - Access raw data for custom analysis
 - Perform ad-hoc queries as needed
+
+## SQL Queries for Common Operations
+
+### Retrieving First Close Date
+The first close date for LPs is stored in the `effective_date` field of the `tbLPLookup` table. Here are examples of how to query this information:
+
+#### SQL Query
+```sql
+-- Get first close date for a specific LP
+SELECT short_name, effective_date AS first_close_date 
+FROM tbLPLookup
+WHERE short_name = 'LP_NAME';
+
+
+#### Python Code (using SQLAlchemy)
+```python
+from sqlalchemy.orm import Session
+from backend.db import SessionLocal
+from backend.models import tbLPLookup
+
+def get_first_close_date(lp_short_name):
+    """Get first close date for a specific LP"""
+    db = SessionLocal()
+    try:
+        lp = db.query(tbLPLookup).filter(tbLPLookup.short_name == lp_short_name).first()
+        return lp.effective_date if lp else None
+    finally:
+        db.close()
+
+def get_all_first_close_dates():
+    """Get first close dates for all LPs"""
+    db = SessionLocal()
+    try:
+        lps = db.query(tbLPLookup.short_name, tbLPLookup.effective_date).order_by(tbLPLookup.effective_date).all()
+        return [(lp.short_name, lp.effective_date) for lp in lps]
+    finally:
+        db.close()
+```
+
+#### Accessing in the FastAPI Routes
+The first close date is already included in the `/api/lp/{short_name}` endpoint response under `lp_details.effective_date`.

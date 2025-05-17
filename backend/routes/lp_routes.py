@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from ..db import SessionLocal
-from ..models import tbLPLookup, tbLPFund
-from ..services.metrics_calculator import calculate_fund_metrics, calculate_lp_totals, calculate_lp_irr, get_pcap_report_date
+from backend.db import SessionLocal
+from backend.models import tbLPLookup, tbLPFund
+from backend.services.metrics_calculator import calculate_fund_metrics, calculate_lp_totals, calculate_lp_irr, get_pcap_report_date
 from datetime import datetime
 
 router = APIRouter()

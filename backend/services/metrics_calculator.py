@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, func
-from ..models import tbLedger, tbLPFund, tbPCAP
+# Change from relative to absolute imports
+from backend.models import tbLedger, tbLPFund, tbPCAP
 from datetime import datetime
-from .irr_calculator import xirr
+from backend.services.irr_calculator import xirr
 
 def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, report_date: str):
     """Calculate fund metrics for a specific LP and fund as of the report date"""
@@ -77,20 +78,31 @@ def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, repo
         key=lambda x: x.effective_date
     )
 
+    # Return restructured data to match frontend expectations
     return {
-        "total_commitment": total_commitment,
-        "total_capital_called": total_capital_called,
-        "total_capital_distribution": total_capital_distribution,
-        "total_income_distribution": total_income_distribution,
-        "total_distribution": total_distribution,
-        "remaining_capital": remaining_capital,
-        "raw_data": {
-            "commitment_transactions": transactions_to_dict(commitment_transactions),
-            "capital_call_transactions": transactions_to_dict(capital_call_transactions),
-            "capital_distribution_transactions": transactions_to_dict(capital_distribution_transactions),
-            "income_distribution_transactions": transactions_to_dict(income_distribution_transactions),
-            "total_distribution_transactions": transactions_to_dict(all_distribution_transactions),
-            "remaining_capital_transactions": transactions_to_dict(remaining_capital_transactions)
+        "total_commitment": {
+            "value": total_commitment,
+            "transactions": transactions_to_dict(commitment_transactions)
+        },
+        "total_capital_called": {
+            "value": total_capital_called,
+            "transactions": transactions_to_dict(capital_call_transactions)
+        },
+        "total_capital_distribution": {
+            "value": total_capital_distribution,
+            "transactions": transactions_to_dict(capital_distribution_transactions)
+        },
+        "total_income_distribution": {
+            "value": total_income_distribution,
+            "transactions": transactions_to_dict(income_distribution_transactions)
+        },
+        "total_distribution": {
+            "value": total_distribution,
+            "transactions": transactions_to_dict(all_distribution_transactions)
+        },
+        "remaining_capital": {
+            "value": remaining_capital,
+            "transactions": transactions_to_dict(remaining_capital_transactions)
         }
     }
 
@@ -99,37 +111,28 @@ def calculate_lp_totals(db: Session, lp_short_name: str, report_date: str):
     # Get all funds for this LP
     funds = db.query(tbLPFund).filter(tbLPFund.lp_short_name == lp_short_name).all()
     
+    # Initialize with the structure the frontend expects
     totals = {
-        "total_commitment": 0,
-        "total_capital_called": 0,
-        "total_capital_distribution": 0,
-        "total_income_distribution": 0,
-        "total_distribution": 0,
-        "remaining_capital": 0,
-        "raw_data": {
-            "commitment_transactions": [],
-            "capital_call_transactions": [],
-            "capital_distribution_transactions": [],
-            "income_distribution_transactions": [],
-            "total_distribution_transactions": [],
-            "remaining_capital_transactions": []
-        }
+        "total_commitment": {"value": 0, "transactions": []},
+        "total_capital_called": {"value": 0, "transactions": []},
+        "total_capital_distribution": {"value": 0, "transactions": []},
+        "total_income_distribution": {"value": 0, "transactions": []},
+        "total_distribution": {"value": 0, "transactions": []},
+        "remaining_capital": {"value": 0, "transactions": []}
     }
     
     # Sum up metrics across all funds
     for fund in funds:
         fund_metrics = calculate_fund_metrics(db, lp_short_name, fund.fund_name, report_date)
-        for key in ["total_commitment", "total_capital_called", "total_capital_distribution", 
-                   "total_income_distribution", "total_distribution", "remaining_capital"]:
-            totals[key] += fund_metrics[key]
-        
-        # Combine raw data
-        for key in totals["raw_data"]:
-            totals["raw_data"][key].extend(fund_metrics["raw_data"][key])
+        # Add values
+        for key in totals:
+            totals[key]["value"] += fund_metrics[key]["value"]
+            # Combine transactions
+            totals[key]["transactions"].extend(fund_metrics[key]["transactions"])
     
-    # Sort combined transactions by date
-    for key in totals["raw_data"]:
-        totals["raw_data"][key].sort(key=lambda x: x["effective_date"])
+    # Sort combined transactions by date for each metric
+    for key in totals:
+        totals[key]["transactions"].sort(key=lambda x: x["effective_date"])
     
     return totals
 
