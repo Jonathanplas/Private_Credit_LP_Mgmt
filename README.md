@@ -127,11 +127,21 @@ Implementation details:
 
 ### 4. IRR Calculation
 - Implementation: Custom XIRR calculation matching Excel's methodology
-- Includes:
-  - Capital Calls (negative cash flows)
-  - Distributions (positive cash flows)
-  - Ending Capital Balance from PCAP Report Date
+- Includes these cash flows:
+  - Capital Calls (negative cash flows) from tbLedger where activity = 'Capital Call'
+  - Distributions (positive cash flows) from tbLedger where activity = 'LP Distribution'
+  - Ending Capital Balance from tbPCAP as of PCAP Report Date
+    - Specifically retrieves only the "Ending Capital Balance" field value from tbPCAP
+    - Uses the most recent entry when multiple entries exist (sorted by field_num)
 - Calculated at the aggregate LP level across all funds
+- Implementation:
+  - XIRR formula: `0 = Σ [ CF_i / (1 + IRR)^(d_i/365) ]`
+  - Solver: SciPy's Newton method implementation
+  - Backend function: `calculate_lp_irr` in metrics_calculator.py
+- Cash Flow Convention:
+  - Capital calls are recorded as negative values (cash outflow from investor perspective)
+  - Distributions and ending balances are recorded as positive values (cash inflow to investor)
+  - This convention matches standard finance practice and Excel's XIRR function
 
 ### 5. Date Handling
 - Report Date:

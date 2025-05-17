@@ -185,16 +185,21 @@ def calculate_lp_irr(db: Session, lp_short_name: str, report_date: str):
     for dist in distributions:
         cash_flows.append((dist.effective_date, dist.amount))
     
-    # Add ending balance from PCAP
-    ending_balance = db.query(func.sum(tbPCAP.amount))\
+    # Add ending balance from PCAP - Get the LAST/most recent Ending Capital Balance
+    # Use order_by to ensure we get the most recent entry if there are multiple with the same field name and date
+    ending_balance_record = db.query(tbPCAP)\
         .filter(
             and_(
                 tbPCAP.lp_short_name == lp_short_name,
-                tbPCAP.pcap_date == pcap_date
+                tbPCAP.pcap_date == pcap_date,
+                tbPCAP.field == "Ending Capital Balance"
             )
-        ).scalar()
+        )\
+        .order_by(tbPCAP.field_num.desc())\
+        .first()
     
-    if ending_balance:
+    if ending_balance_record:
+        ending_balance = ending_balance_record.amount
         cash_flows.append((pcap_date, ending_balance))
     
     # Calculate IRR if we have cash flows
@@ -267,16 +272,20 @@ def export_irr_cash_flows_to_csv(db: Session, output_file="irr_cash_flows.csv"):
                 cash_flows.append((dist.effective_date, dist.amount))
                 cash_flow_descriptions.append(f"Distribution - {dist.sub_activity}")
             
-            # Add ending balance from PCAP
-            ending_balance = db.query(func.sum(tbPCAP.amount))\
+            # Add ending balance from PCAP - Get the LAST/most recent Ending Capital Balance
+            ending_balance_record = db.query(tbPCAP)\
                 .filter(
                     and_(
                         tbPCAP.lp_short_name == lp_name,
-                        tbPCAP.pcap_date == pcap_date
+                        tbPCAP.pcap_date == pcap_date,
+                        tbPCAP.field == "Ending Capital Balance"
                     )
-                ).scalar()
+                )\
+                .order_by(tbPCAP.field_num.desc())\
+                .first()
             
-            if ending_balance:
+            if ending_balance_record:
+                ending_balance = ending_balance_record.amount
                 cash_flows.append((pcap_date, ending_balance))
                 cash_flow_descriptions.append("PCAP Ending Balance")
             

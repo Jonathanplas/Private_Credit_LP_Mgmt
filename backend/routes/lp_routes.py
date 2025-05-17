@@ -153,16 +153,20 @@ def get_irr_cash_flows(short_name: str, report_date: str, db: Session = Depends(
                 "related_fund": dist.related_fund
             })
         
-        # Add ending balance from PCAP
-        ending_balance = db.query(func.sum(tbPCAP.amount))\
+        # Add ending balance from PCAP - Get the LAST/most recent Ending Capital Balance entry
+        ending_balance_record = db.query(tbPCAP)\
             .filter(
                 and_(
                     tbPCAP.lp_short_name == short_name,
-                    tbPCAP.pcap_date == pcap_date
+                    tbPCAP.pcap_date == pcap_date,
+                    tbPCAP.field == "Ending Capital Balance"
                 )
-            ).scalar()
+            )\
+            .order_by(tbPCAP.field_num.desc())\
+            .first()
         
-        if ending_balance:
+        if ending_balance_record:
+            ending_balance = ending_balance_record.amount
             cash_flows.append({
                 "effective_date": pcap_date.strftime('%Y-%m-%d'),
                 "activity": "PCAP Ending Balance",
