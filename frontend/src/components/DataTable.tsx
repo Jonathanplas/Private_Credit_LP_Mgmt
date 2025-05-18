@@ -39,8 +39,17 @@ const DataTable: React.FC<TableProps> = ({ tableType }) => {
   // Load data when the tableType changes
   useEffect(() => {
     fetchData();
-  }, [tableType]); // Removed fetchData from dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableType]); // We intentionally omit fetchData to prevent infinite loops
   
+  // Reset new item data when tableType changes
+  useEffect(() => {
+    setNewItemData(getNewItemTemplate());
+    setNewItem(false);
+    setEditingItem(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableType]); // We intentionally omit getNewItemTemplate to prevent unnecessary re-renders
+
   // Function to create a new item
   const handleCreateItem = async (item: DataType) => {
     try {
@@ -135,20 +144,55 @@ const DataTable: React.FC<TableProps> = ({ tableType }) => {
       const lpfundItem = formattedItem as LPFundData;
       
       // Ensure term and current_are are numbers, not strings
-      if (lpfundItem.term !== null) {
+      if (lpfundItem.term !== undefined && lpfundItem.term !== null) {
         lpfundItem.term = Number(lpfundItem.term);
+        // If conversion results in NaN, set to null
+        if (isNaN(lpfundItem.term)) lpfundItem.term = null;
       }
-      if (lpfundItem.current_are !== null) {
+      
+      if (lpfundItem.current_are !== undefined && lpfundItem.current_are !== null) {
         lpfundItem.current_are = Number(lpfundItem.current_are);
+        if (isNaN(lpfundItem.current_are)) lpfundItem.current_are = null;
       }
       
       // Ensure management_fee and incentive are numbers, not strings
-      if (lpfundItem.management_fee !== null) {
+      if (lpfundItem.management_fee !== undefined && lpfundItem.management_fee !== null) {
         lpfundItem.management_fee = Number(lpfundItem.management_fee);
+        if (isNaN(lpfundItem.management_fee)) lpfundItem.management_fee = null;
       }
-      if (lpfundItem.incentive !== null) {
+      
+      if (lpfundItem.incentive !== undefined && lpfundItem.incentive !== null) {
         lpfundItem.incentive = Number(lpfundItem.incentive);
+        if (isNaN(lpfundItem.incentive)) lpfundItem.incentive = null;
       }
+      
+      // Convert empty strings to null for all string fields
+      Object.keys(lpfundItem).forEach(key => {
+        const value = (lpfundItem as any)[key];
+        if (value === '') {
+          (lpfundItem as any)[key] = null;
+        }
+      });
+      
+      // Ensure date fields are formatted properly
+      const dateFields = ['term_end', 'are_start', 'reinvest_start', 'harvest_start', 'inactive_date'];
+      dateFields.forEach(dateField => {
+        const value = (lpfundItem as any)[dateField];
+        if (value && typeof value === 'string' && !value.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          try {
+            // Try to convert string date to ISO format
+            const date = new Date(value);
+            if (!isNaN(date.getTime())) {
+              (lpfundItem as any)[dateField] = date.toISOString().split('T')[0];
+            } else {
+              (lpfundItem as any)[dateField] = null;
+            }
+          } catch (e) {
+            console.error(`Failed to parse date for ${dateField}`, e);
+            (lpfundItem as any)[dateField] = null;
+          }
+        }
+      });
     }
     
     // Handle specific formatting for pcap table
@@ -156,9 +200,23 @@ const DataTable: React.FC<TableProps> = ({ tableType }) => {
       const pcapItem = formattedItem as PCAPData;
       if (pcapItem.field_num !== null) {
         pcapItem.field_num = Number(pcapItem.field_num);
+        if (isNaN(pcapItem.field_num)) pcapItem.field_num = 0;
       }
       if (pcapItem.amount !== null) {
         pcapItem.amount = Number(pcapItem.amount);
+        if (isNaN(pcapItem.amount)) pcapItem.amount = 0;
+      }
+      
+      // Format pcap_date properly - fixed to use typeof check instead of instanceof
+      if (pcapItem.pcap_date && typeof pcapItem.pcap_date === 'string' && !pcapItem.pcap_date.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        try {
+          const date = new Date(pcapItem.pcap_date);
+          if (!isNaN(date.getTime())) {
+            pcapItem.pcap_date = date.toISOString().split('T')[0];
+          }
+        } catch (e) {
+          console.error('Failed to parse pcap_date', e);
+        }
       }
     }
     
@@ -167,7 +225,24 @@ const DataTable: React.FC<TableProps> = ({ tableType }) => {
       const ledgerItem = formattedItem as LedgerData;
       if (ledgerItem.amount !== null) {
         ledgerItem.amount = Number(ledgerItem.amount);
+        if (isNaN(ledgerItem.amount)) ledgerItem.amount = 0;
       }
+      
+      // Format date fields properly
+      const dateFields = ['entry_date', 'activity_date', 'effective_date'];
+      dateFields.forEach(dateField => {
+        const value = (ledgerItem as any)[dateField];
+        if (value && typeof value === 'string' && !value.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          try {
+            const date = new Date(value);
+            if (!isNaN(date.getTime())) {
+              (ledgerItem as any)[dateField] = date.toISOString().split('T')[0];
+            }
+          } catch (e) {
+            console.error(`Failed to parse date for ${dateField}`, e);
+          }
+        }
+      });
     }
     
     return formattedItem;
@@ -342,7 +417,8 @@ const DataTable: React.FC<TableProps> = ({ tableType }) => {
     setNewItemData(getNewItemTemplate());
     setNewItem(false);
     setEditingItem(null);
-  }, [tableType]); // Removed getNewItemTemplate from dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableType]); // We intentionally omit getNewItemTemplate to prevent unnecessary re-renders
   
   // Function to render table headers based on the data
   const renderTableHeaders = () => {
