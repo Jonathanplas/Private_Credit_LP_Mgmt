@@ -195,7 +195,13 @@ def calculate_lp_irr(db: Session, lp_short_name: str, report_date: str):
     # Get PCAP report date
     pcap_date = get_pcap_report_date(db, report_date)
     if not pcap_date:
-        return None
+        return {"irr": None, "snapshot_data_issue": False, "chronology_issue": False}
+    
+    # Added debug logging for Magic LP
+    is_magic_lp = lp_short_name == "Magic"
+    if is_magic_lp:
+        print(f"\nDEBUG calculate_lp_irr for Magic LP:")
+        print(f"PCAP date: {pcap_date}")
         
     # Get all relevant cash flows
     cash_flows = []
@@ -213,36 +219,44 @@ def calculate_lp_irr(db: Session, lp_short_name: str, report_date: str):
     for call in calls:
         cash_flows.append((call.effective_date, -call.amount))
     
-    # Check if we have no capital calls from tbLedger
+    if is_magic_lp:
+        print(f"Capital calls from tbLedger: {len(calls)}")
+    
+    # Check for transfers - ALWAYS include transfers, not just when there are no calls
+    transfers_record = db.query(tbPCAP)\
+        .filter(
+            and_(
+                tbPCAP.lp_short_name == lp_short_name,
+                tbPCAP.pcap_date == pcap_date,
+                tbPCAP.field == "Transfers"
+            )
+        ).first()
+    
+    if transfers_record and transfers_record.amount > 0:
+        # Use pcap_date as the effective date for the transfer
+        # We treat transfers as capital calls (negative cash flow from investor perspective)
+        cash_flows.append((pcap_date, -transfers_record.amount))
+        if is_magic_lp:
+            print(f"Transfer found: amount = {transfers_record.amount}")
+    elif is_magic_lp:
+        print("No transfer record found or amount is zero")
+    
+    # If no capital calls and no transfers, try Capital Calls from tbPCAP
     if len(cash_flows) == 0:
-        # First try transfers
-        transfers_record = db.query(tbPCAP)\
+        pcap_capital_calls = db.query(tbPCAP)\
             .filter(
                 and_(
                     tbPCAP.lp_short_name == lp_short_name,
                     tbPCAP.pcap_date == pcap_date,
-                    tbPCAP.field == "Transfers"
+                    tbPCAP.field == "Capital Calls"
                 )
             ).first()
         
-        if transfers_record and transfers_record.amount > 0:
-            # Use pcap_date as the effective date for the transfer
-            # We treat transfers as capital calls (negative cash flow from investor perspective)
-            cash_flows.append((pcap_date, -transfers_record.amount))
-        else:
-            # If no transfers, try Capital Calls from tbPCAP
-            pcap_capital_calls = db.query(tbPCAP)\
-                .filter(
-                    and_(
-                        tbPCAP.lp_short_name == lp_short_name,
-                        tbPCAP.pcap_date == pcap_date,
-                        tbPCAP.field == "Capital Calls"
-                    )
-                ).first()
-            
-            if pcap_capital_calls and pcap_capital_calls.amount > 0:
-                # Use pcap_date as the effective date for the capital calls
-                cash_flows.append((pcap_date, -pcap_capital_calls.amount))
+        if pcap_capital_calls and pcap_capital_calls.amount > 0:
+            # Use pcap_date as the effective date for the capital calls
+            cash_flows.append((pcap_date, -pcap_capital_calls.amount))
+            if is_magic_lp:
+                print(f"PCAP Capital calls found: amount = {pcap_capital_calls.amount}")
     
     # Add Distributions (positive cash flows)
     distributions = db.query(tbLedger)\
@@ -256,6 +270,11 @@ def calculate_lp_irr(db: Session, lp_short_name: str, report_date: str):
     
     for dist in distributions:
         cash_flows.append((dist.effective_date, dist.amount))
+    
+    if is_magic_lp:
+        print(f"Distributions from tbLedger: {len(distributions)}")
+        dist_sum = sum(d.amount for d in distributions)
+        print(f"Sum of distributions: {dist_sum}")
     
     # Add ending balance from PCAP - Get the LAST/most recent Ending Capital Balance
     # Use order_by to ensure we get the most recent entry if there are multiple with the same field name and date
@@ -273,15 +292,58 @@ def calculate_lp_irr(db: Session, lp_short_name: str, report_date: str):
     if ending_balance_record:
         ending_balance = ending_balance_record.amount
         cash_flows.append((pcap_date, ending_balance))
+        if is_magic_lp:
+            print(f"PCAP Ending Balance found: {ending_balance}")
+    elif is_magic_lp:
+        print("No ending balance record found in PCAP")
     
     # Calculate IRR if we have cash flows
     if cash_flows:
+        if is_magic_lp:
+            print(f"Cash flows for IRR calculation: {cash_flows}")
         try:
-            return xirr(cash_flows)
-        except:
-            return None
+            # Ensure we format the cash flows for display in a cleaner way
+            if is_magic_lp:
+                print("Cash flows in chronological order:")
+                for date, amount in sorted(cash_flows, key=lambda x: x[0]):
+                    print(f"  {date.strftime('%Y-%m-%d')}: ${amount:,.2f}")
+            
+            result = xirr(cash_flows)
+            
+            # Handle the expanded return value
+            if isinstance(result, tuple) and len(result) == 3:
+                irr_value, snapshot_data_issue, chronology_issue = result
+                
+                if is_magic_lp:
+                    print(f"IRR calculation result: {irr_value}")
+                    print(f"Snapshot data issue detected: {snapshot_data_issue}")
+                    print(f"Chronology issue detected: {chronology_issue}")
+                
+                return {
+                    "irr": irr_value,
+                    "snapshot_data_issue": snapshot_data_issue,
+                    "chronology_issue": chronology_issue
+                }
+            else:
+                # Handle older versions or failed calculations
+                if is_magic_lp:
+                    print(f"IRR calculation result (simple): {result}")
+                
+                return {
+                    "irr": result,
+                    "snapshot_data_issue": False,
+                    "chronology_issue": False
+                }
+                
+        except Exception as e:
+            if is_magic_lp:
+                print(f"Exception in IRR calculation: {str(e)}")
+            return {"irr": None, "snapshot_data_issue": False, "chronology_issue": False}
     
-    return None
+    if is_magic_lp:
+        print("No cash flows available for IRR calculation")
+    
+    return {"irr": None, "snapshot_data_issue": False, "chronology_issue": False}
 
 def export_irr_cash_flows_to_csv(db: Session, output_file="irr_cash_flows.csv"):
     """
@@ -330,22 +392,36 @@ def export_irr_cash_flows_to_csv(db: Session, output_file="irr_cash_flows.csv"):
                 cash_flows.append((call.effective_date, -call.amount))
                 cash_flow_descriptions.append(f"Capital Call - {call.sub_activity}")
             
-            # Check if we have no capital calls but we do have transfers in PCAP
+            # Always check for transfers - include even if we already have capital calls
+            transfers_record = db.query(tbPCAP)\
+                .filter(
+                    and_(
+                        tbPCAP.lp_short_name == lp_name,
+                        tbPCAP.pcap_date == pcap_date,
+                        tbPCAP.field == "Transfers"
+                    )
+                ).first()
+            
+            if transfers_record and transfers_record.amount > 0:
+                # Use pcap_date as the effective date for the transfer
+                # We treat transfers as capital calls (negative cash flow from investor perspective)
+                cash_flows.append((pcap_date, -transfers_record.amount))
+                cash_flow_descriptions.append("Transfer (Capital Contribution)")
+            
+            # If no capital calls and no transfers, try Capital Calls from tbPCAP
             if len(cash_flows) == 0:
-                transfers_record = db.query(tbPCAP)\
+                pcap_capital_calls = db.query(tbPCAP)\
                     .filter(
                         and_(
                             tbPCAP.lp_short_name == lp_name,
                             tbPCAP.pcap_date == pcap_date,
-                            tbPCAP.field == "Transfers"
+                            tbPCAP.field == "Capital Calls"
                         )
                     ).first()
                 
-                if transfers_record and transfers_record.amount > 0:
-                    # Use pcap_date as the effective date for the transfer
-                    # We treat transfers as capital calls (negative cash flow from investor perspective)
-                    cash_flows.append((pcap_date, -transfers_record.amount))
-                    cash_flow_descriptions.append("Transfer (Capital Contribution)")
+                if pcap_capital_calls and pcap_capital_calls.amount > 0:
+                    cash_flows.append((pcap_date, -pcap_capital_calls.amount))
+                    cash_flow_descriptions.append("Capital Call (from PCAP)")
             
             # Add Distributions (positive cash flows)
             distributions = db.query(tbLedger)\
@@ -385,6 +461,8 @@ def export_irr_cash_flows_to_csv(db: Session, output_file="irr_cash_flows.csv"):
                     irr_value = xirr(cash_flows)
                 except Exception as e:
                     irr_value = f"Error: {str(e)}"
+                    print(f"IRR calculation failed for {lp_name}: {str(e)}")
+                    print(f"Cash flows: {cash_flows}")
             
             # Write cash flows to CSV
             for i, ((date, amount), description) in enumerate(zip(cash_flows, cash_flow_descriptions)):
