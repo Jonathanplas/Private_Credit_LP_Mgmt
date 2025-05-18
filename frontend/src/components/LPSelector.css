@@ -1,0 +1,51 @@
+.lp-selector {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.select-group, .date-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.select-group label, .date-group label {
+    font-weight: bold;
+    color: #666;
+}
+
+select, input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    min-width: 200px;
+}
+
+select:focus, input[type="date"]:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 2px rgba(0,102,204,0.2);
+}
+
+.metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.metric-label {
+    font-weight: 500;
+}
+
+.metric-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

@@ -1,0 +1,309 @@
+.tooltip-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: help;
+}
+
+.tooltip-content {
+    position: absolute;
+    /* Changed from bottom: 125% to top: 0 with transform for better positioning */
+    top: 0;
+    transform: translateY(-100%);
+    /* If tooltip is too close to top, show it below instead */
+    left: auto;
+    right: 0;
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: normal;
+    width: max-content;
+    max-width: 650px;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s;
+    /* Added to ensure the tooltip doesn't go off-screen */
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* Added this class that will be toggled by JS */
+.tooltip-content.below {
+    top: 100%;
+    transform: translateY(0);
+}
+
+/* Add a media query for smaller screens */
+@media (max-width: 1200px) {
+    .tooltip-content {
+        max-width: 550px;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 768px) {
+    .tooltip-content {
+        max-width: 90vw;
+        right: -20px; /* Adjust position for small screens */
+    }
+}
+
+.tooltip-text {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.tooltip-data {
+    padding: 8px;
+    background-color: #444;
+    border-radius: 0 0 4px 4px;
+    overflow-x: auto; /* Add horizontal scroll if needed */
+}
+
+.data-preview {
+    width: 100%;
+    min-width: 600px; /* Ensure minimum width for readability */
+    border-collapse: collapse;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: white; /* Ensure all text is white for better contrast */
+}
+
+.data-preview th,
+.data-preview td {
+    padding: 4px 8px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.data-preview th {
+    font-weight: 600;
+    color: #fff; /* Changed from #aaa to white for better visibility */
+    background-color: #3a3a3a;
+    position: sticky;
+    top: 0;
+}
+
+/* Add alternating row colors with darker background */
+.data-preview tr:nth-child(odd) {
+    background-color: #333; /* Darker background for odd rows */
+}
+
+.data-preview tr:nth-child(even) {
+    background-color: #444; /* Even darker background for even rows */
+}
+
+/* Add hover effect for better row highlighting */
+.data-preview tr:hover {
+    background-color: #555;
+}
+
+.data-preview th:nth-child(1), /* Date */
+.data-preview td:nth-child(1) {
+    width: 100px;
+}
+
+.data-preview th:nth-child(2), /* Activity */
+.data-preview td:nth-child(2) {
+    width: 150px;
+}
+
+.data-preview th:nth-child(3), /* Fund */
+.data-preview td:nth-child(3) {
+    width: 150px;
+}
+
+.data-preview th:nth-child(4), /* Amount */
+.data-preview td:nth-child(4) {
+    width: 120px;
+    text-align: right;
+}
+
+.tooltip-footer {
+    padding: 4px 8px;
+    color: #aaa;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.download-button {
+    width: 100%;
+    padding: 6px;
+    margin-top: 8px;
+    background-color: #555;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s;
+}
+
+.download-button:hover {
+    background-color: #666;
+}
+
+.info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+    color: #666;
+    font-size: 16px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    transition: all 0.2s ease;
+}
+
+.tooltip-container:hover .info-icon {
+    color: #333;
+    background-color: #e0e0e0;
+}
+
+.metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+    padding: 4px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.metric-label {
+    font-weight: 500;
+    color: #555;
+}
+
+.metric-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-icon {
+    color: #666;
+    cursor: help;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.info-icon:hover {
+    opacity: 1;
+}
+
+/* IRR tooltip specific styles */
+.irr-tooltip {
+    min-width: 450px; /* Reduced from 600px */
+    width: fit-content;
+    max-width: 90vw; /* Ensure it doesn't exceed viewport width */
+}
+
+.formula-section {
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.formula {
+    background-color: #444;
+    padding: 8px; /* Reduced padding */
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px; /* Further reduced from 15px */
+    margin: 8px 0;
+    overflow-x: auto; 
+    white-space: nowrap;
+}
+
+.formula-explanation {
+    color: #ccc;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 12px; /* Reduced from 13px */
+}
+
+.irr-components {
+    border-left: 3px solid rgba(255,255,255,0.2);
+    padding-left: 10px;
+    margin: 10px 0;
+}
+
+.irr-components p {
+    margin: 6px 0;
+    font-size: 13px; /* Added to control text size */
+}
+
+.irr-components p strong {
+    color: #fff;
+}
+
+.data-source {
+    color: #aaa;
+    font-style: italic;
+    font-size: 12px;
+    margin-top: 0;
+    margin-bottom: 12px;
+    padding-left: 10px;
+}
+
+.irr-notes {
+    background-color: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 4px;
+    margin: 15px 0;
+}
+
+.irr-notes p {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+.irr-result {
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Chronology warning styles */
+.chronology-warning {
+    background-color: rgba(255, 200, 0, 0.15);
+    border-left: 3px solid #FFB300;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.chronology-warning p {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+.chronology-warning p strong {
+    color: #FFB300;
+}
+
+/* Snapshot data warning styles */
+.snapshot-data-warning {
+    background-color: rgba(0, 120, 215, 0.15);
+    border-left: 3px solid #0078D7;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.snapshot-data-warning p {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+.snapshot-data-warning p strong {
+    color: #0078D7;
+}

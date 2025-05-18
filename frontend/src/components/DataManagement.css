@@ -1,0 +1,43 @@
+.data-management-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.table-selector {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  overflow-x: auto; /* Allow scrolling if tabs don't fit */
+  white-space: nowrap;
+}
+
+.table-selector button {
+  padding: 10px 15px;
+  margin-right: 10px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.table-selector button:hover {
+  background-color: #e0e0e0;
+}
+
+.table-selector button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.table-container {
+  width: 100%;
+  padding: 0 10px; /* Add padding on the sides */
+  box-sizing: border-box; /* Include padding in the width calculation */
+}
