@@ -105,7 +105,8 @@ def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, repo
                 "sub_activity": t.sub_activity,
                 "amount": t.amount,
                 "entity_from": t.entity_from,
-                "entity_to": t.entity_to
+                "entity_to": t.entity_to,
+                "related_fund": t.related_fund  # Added related_fund field
             }
             for t in transactions
         ]
