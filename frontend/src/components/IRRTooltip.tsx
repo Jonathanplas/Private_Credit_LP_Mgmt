@@ -139,7 +139,7 @@ const IRRTooltip: React.FC<IRRTooltipProps> = ({
 
     const handleMouseLeave = (e: React.MouseEvent) => {
         // Check if the mouse is leaving to go to the tooltip content
-        if (contentRef.current && !contentRef.current.contains(e.relatedTarget as Node)) {
+        if (contentRef.current && e.relatedTarget instanceof Node && !contentRef.current.contains(e.relatedTarget)) {
             // Only hide the tooltip if we're not moving into the tooltip content
             setIsVisible(false);
         }
@@ -147,14 +147,22 @@ const IRRTooltip: React.FC<IRRTooltipProps> = ({
 
     const handleContentMouseLeave = (e: React.MouseEvent) => {
         // Check if we're moving back to the tooltip icon
-        if (tooltipRef.current && !tooltipRef.current.contains(e.relatedTarget as Node)) {
+        if (tooltipRef.current && e.relatedTarget instanceof Node && !tooltipRef.current.contains(e.relatedTarget)) {
             // Only hide the tooltip if we're not moving back to the icon
             setIsVisible(false);
         }
     };
 
     const downloadCSV = () => {
-        if (!cashFlows || cashFlows.length === 0) return;
+        if (!cashFlows || cashFlows.length === 0) {
+            console.error('No cash flows available for download.');
+            alert('No cash flows available to download. Please check the data.');
+            return;
+        }
+
+        console.log('Download CSV triggered');
+        console.log('Cash Flows:', cashFlows);
+        console.log('LP Short Name:', lpShortName);
 
         const headers = ['Date', 'Activity', 'Sub Activity', 'Amount', 'From', 'To', 'Fund'];
         const csvContent = [
