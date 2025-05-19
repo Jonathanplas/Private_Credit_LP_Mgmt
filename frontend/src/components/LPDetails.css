@@ -2,6 +2,8 @@
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .basic-info {
@@ -151,8 +153,133 @@ h3, h4 {
     color: #333;
 }
 
+.reinvestment-notification {
+    background: linear-gradient(to right, #f5fafe, #e8f4ff);
+    border-left: 4px solid #2196f3;
+    border-radius: 6px;
+    margin: 20px 0;
+    padding: 15px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+}
+
+.reinvestment-notification h4 {
+    margin: 0 0 10px 0;
+    color: #1565c0;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.reinvestment-notification p {
+    margin: 0;
+    color: #455a64;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.reinvestment-notification strong {
+    color: #0d47a1;
+}
+
 @media (max-width: 768px) {
     .totals-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Remaining capital toggle styling */
+.remaining-capital-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 180px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px;
+    border-radius: 30px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.2s;
+    font-size: 12px;
+}
+
+.toggle-label {
+    padding: 5px;
+    z-index: 1;
+    color: #666;
+    transition: color 0.2s;
+}
+
+input:checked ~ label .toggle-label:first-child {
+    color: #666;
+}
+
+input:checked ~ label .toggle-label:last-child {
+    color: #fff;
+}
+
+input:not(:checked) ~ label .toggle-label:first-child {
+    color: #fff;
+}
+
+input:not(:checked) ~ label .toggle-label:last-child {
+    color: #666;
+}
+
+.toggle-button {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 90px;
+    height: 24px;
+    border-radius: 20px;
+    transition: 0.2s;
+    background-color: #2196F3;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+input:checked ~ label .toggle-button {
+    transform: translateX(86px);
+}
+
+/* Add a hint about the toggle when hovering */
+.toggle-switch:hover::after {
+    content: "Switch between cash-based and NAV-based calculations";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0.9;
+    margin-bottom: 5px;
 }

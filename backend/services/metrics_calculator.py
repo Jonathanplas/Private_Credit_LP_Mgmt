@@ -95,7 +95,65 @@ def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, repo
 
     # Calculate remaining metrics
     total_distribution = total_capital_distribution + total_income_distribution
-    remaining_capital = total_capital_called - total_capital_distribution
+    
+    # Calculate both versions of remaining capital
+    # Cash-based (traditional): Called Amount - Capital Distribution
+    cash_based_remaining = total_capital_called - total_capital_distribution
+    
+    # NAV-based: Use PCAP Ending Balance if available
+    nav_based_remaining = cash_based_remaining  # Default to cash-based if no NAV available
+    
+    # Check if this fund is in reinvestment phase
+    fund_info = db.query(tbLPFund).filter(tbLPFund.lp_short_name == lp_short_name, 
+                                          tbLPFund.fund_name == fund_name).first()
+    
+    is_reinvest_active = False
+    if fund_info and fund_info.reinvest_start:
+        reinvest_start_date = datetime.strptime(fund_info.reinvest_start, '%m/%d/%Y').date() if isinstance(fund_info.reinvest_start, str) else fund_info.reinvest_start
+        harvest_start_date = None
+        if fund_info.harvest_start:
+            harvest_start_date = datetime.strptime(fund_info.harvest_start, '%m/%d/%Y').date() if isinstance(fund_info.harvest_start, str) else fund_info.harvest_start
+            
+        # Fund is in reinvestment phase if reinvest has started but harvest hasn't
+        is_reinvest_active = reinvest_start_date <= pcap_date and (not harvest_start_date or harvest_start_date > pcap_date)
+    
+    # Look for the PCAP Ending Balance for NAV-based calculation
+    pcap_balance = db.query(tbPCAP)\
+        .filter(
+            and_(
+                tbPCAP.lp_short_name == lp_short_name,
+                tbPCAP.pcap_date == pcap_date,
+                tbPCAP.field == "Ending Capital Balance"
+            )
+        )\
+        .order_by(tbPCAP.field_num.desc())\
+        .first()
+        
+    # If no exact match, try to get the closest ending balance by date
+    if not pcap_balance:
+        # Try for dates within the same month
+        month_start = pcap_date.replace(day=1)
+        next_month = (pcap_date.replace(day=28) + timedelta(days=4)).replace(day=1)
+        
+        pcap_balance = db.query(tbPCAP)\
+            .filter(
+                and_(
+                    tbPCAP.lp_short_name == lp_short_name,
+                    tbPCAP.pcap_date >= month_start,
+                    tbPCAP.pcap_date < next_month,
+                    tbPCAP.field == "Ending Capital Balance"
+                )
+            )\
+            .order_by(func.abs(tbPCAP.pcap_date - pcap_date))\
+            .first()
+        
+    # If we found a PCAP Ending Balance, use it for NAV-based remaining capital
+    if pcap_balance:
+        nav_based_remaining = pcap_balance.amount
+    
+    # Set the default remaining capital based on reinvestment status
+    # For reinvest-active funds, use NAV-based; otherwise, use cash-based
+    remaining_capital = nav_based_remaining if is_reinvest_active else cash_based_remaining
 
     def transactions_to_dict(transactions):
         return [
@@ -146,6 +204,9 @@ def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, repo
         },
         "remaining_capital": {
             "value": remaining_capital,
+            "cash_based_value": cash_based_remaining,
+            "nav_based_value": nav_based_remaining,
+            "is_reinvest_active": is_reinvest_active,
             "transactions": transactions_to_dict(remaining_capital_transactions)
         }
     }
@@ -162,17 +223,38 @@ def calculate_lp_totals(db: Session, lp_short_name: str, report_date: str):
         "total_capital_distribution": {"value": 0, "transactions": []},
         "total_income_distribution": {"value": 0, "transactions": []},
         "total_distribution": {"value": 0, "transactions": []},
-        "remaining_capital": {"value": 0, "transactions": []}
+        "remaining_capital": {
+            "value": 0, 
+            "cash_based_value": 0, 
+            "nav_based_value": 0, 
+            "is_reinvest_active": False,
+            "transactions": []
+        }
     }
     
     # Sum up metrics across all funds
     for fund in funds:
         fund_metrics = calculate_fund_metrics(db, lp_short_name, fund.fund_name, report_date)
-        # Add values
-        for key in totals:
+        
+        # Add values for standard metrics
+        for key in ["total_commitment", "total_capital_called", "total_capital_distribution", 
+                   "total_income_distribution", "total_distribution"]:
             totals[key]["value"] += fund_metrics[key]["value"]
             # Combine transactions
             totals[key]["transactions"].extend(fund_metrics[key]["transactions"])
+        
+        # Handle remaining capital specially to track both calculation methods
+        remaining_capital = fund_metrics["remaining_capital"]
+        totals["remaining_capital"]["value"] += remaining_capital["value"]
+        totals["remaining_capital"]["cash_based_value"] += remaining_capital["cash_based_value"] if "cash_based_value" in remaining_capital else remaining_capital["value"]
+        totals["remaining_capital"]["nav_based_value"] += remaining_capital["nav_based_value"] if "nav_based_value" in remaining_capital else remaining_capital["value"]
+        
+        # If any fund is in reinvestment phase, mark the total as having reinvest-active funds
+        if remaining_capital.get("is_reinvest_active", False):
+            totals["remaining_capital"]["is_reinvest_active"] = True
+        
+        # Combine transactions
+        totals["remaining_capital"]["transactions"].extend(remaining_capital["transactions"])
     
     # Sort combined transactions by date for each metric
     for key in totals:

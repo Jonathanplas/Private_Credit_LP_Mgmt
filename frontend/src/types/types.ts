@@ -36,6 +36,15 @@ export interface Metric {
 }
 
 /**
+ * Extended Metric type for remaining capital with both calculation methods
+ */
+export interface RemainingCapitalMetric extends Metric {
+    cash_based_value?: number;
+    nav_based_value?: number;
+    is_reinvest_active?: boolean;
+}
+
+/**
  * Financial metrics shared by both funds and LP totals
  */
 export interface FinancialMetrics {
@@ -44,7 +53,7 @@ export interface FinancialMetrics {
     total_capital_distribution: Metric;
     total_income_distribution: Metric;
     total_distribution: Metric;
-    remaining_capital: Metric;
+    remaining_capital: RemainingCapitalMetric;
 }
 
 /**
