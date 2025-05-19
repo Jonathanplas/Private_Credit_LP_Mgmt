@@ -217,6 +217,7 @@ def get_irr_cash_flows(short_name: str, report_date: str, db: Session = Depends(
             })
         
         # Add ending balance from PCAP - Get the LAST/most recent Ending Capital Balance
+        # First try exact date match
         ending_balance_record = db.query(tbPCAP)\
             .filter(
                 and_(
@@ -228,10 +229,32 @@ def get_irr_cash_flows(short_name: str, report_date: str, db: Session = Depends(
             .order_by(tbPCAP.field_num.desc())\
             .first()
         
+        print(f"Fetching Ending Capital Balance for LP: {short_name}, PCAP Date: {pcap_date}")
+        print(f"Querying tbPCAP for Ending Capital Balance...")
+        
+        # If no exact match, try to find the closest date that's not after pcap_date
+        if not ending_balance_record:
+            print(f"No exact date match found for Ending Capital Balance. Looking for closest date...")
+            ending_balance_record = db.query(tbPCAP)\
+                .filter(
+                    and_(
+                        tbPCAP.lp_short_name == short_name,
+                        tbPCAP.pcap_date <= pcap_date,  # Any date up to pcap_date
+                        tbPCAP.field == "Ending Capital Balance"
+                    )
+                )\
+                .order_by(tbPCAP.pcap_date.desc(), tbPCAP.field_num.desc())\
+                .first()
+            
+            if ending_balance_record:
+                print(f"Found closest date Ending Capital Balance on {ending_balance_record.pcap_date}")
+        
         if ending_balance_record:
+            print(f"tbPCAP Ending Balance Record: {ending_balance_record}, Data Types: {{'amount': type(ending_balance_record.amount), 'pcap_date': type(ending_balance_record.pcap_date)}}")
             ending_balance = ending_balance_record.amount
+            # Use the actual record date rather than pcap_date for the effective date
             cash_flows.append({
-                "effective_date": pcap_date.strftime('%Y-%m-%d'),
+                "effective_date": ending_balance_record.pcap_date.strftime('%Y-%m-%d'),
                 "activity": "PCAP Ending Balance",
                 "sub_activity": "NAV",
                 "amount": ending_balance,
@@ -239,6 +262,79 @@ def get_irr_cash_flows(short_name: str, report_date: str, db: Session = Depends(
                 "entity_to": "",
                 "related_fund": "All Funds"
             })
+        else:
+            print("No Ending Balance found in tbPCAP.")
+
+        # Check tbLedger for Ending Capital Balance
+        ledger_ending_balance = db.query(tbLedger)\
+            .filter(
+                and_(
+                    tbLedger.related_entity == short_name,
+                    tbLedger.activity == "Ending Capital Balance",
+                    tbLedger.effective_date <= pcap_date
+                )
+            )\
+            .order_by(tbLedger.effective_date.desc())\
+            .first()
+
+        if ledger_ending_balance:
+            print(f"tbLedger Ending Balance Record: {ledger_ending_balance}, Data Types: {{'amount': type(ledger_ending_balance.amount), 'effective_date': type(ledger_ending_balance.effective_date)}}")
+            cash_flows.append({
+                "effective_date": ledger_ending_balance.effective_date.strftime('%Y-%m-%d'),
+                "activity": "Ending Capital Balance",
+                "sub_activity": "NAV",
+                "amount": ledger_ending_balance.amount,
+                "entity_from": ledger_ending_balance.entity_from,
+                "entity_to": ledger_ending_balance.entity_to,
+                "related_fund": ledger_ending_balance.related_fund
+            })
+        else:
+            print("No Ending Balance found in tbLedger.")
+        
+        # Special handling for reinvest-active funds
+        # Get fund status to check if this LP has active funds in reinvestment phase
+        funds = db.query(tbLPFund).filter(tbLPFund.lp_short_name == short_name).all()
+        is_reinvest_active = any(
+            fund.reinvest_start and 
+            (datetime.strptime(fund.reinvest_start, '%m/%d/%Y').date() if isinstance(fund.reinvest_start, str) else fund.reinvest_start) <= pcap_date and
+            (not fund.harvest_start or 
+             (datetime.strptime(fund.harvest_start, '%m/%d/%Y').date() if isinstance(fund.harvest_start, str) else fund.harvest_start) > pcap_date)
+            for fund in funds
+        )
+        
+        if is_reinvest_active:
+            print(f"LP {short_name} has funds in reinvestment phase - applying special handling")
+            
+            # For reinvest-active funds, we need to ensure the ending capital balance is included
+            # If we didn't find an ending balance already, try with a date range instead of exact match
+            if not any(cf["activity"] in ["PCAP Ending Balance", "Ending Capital Balance"] for cf in cash_flows):
+                # Try tbPCAP with the closest date
+                closest_pcap_balance = db.query(tbPCAP)\
+                    .filter(
+                        and_(
+                            tbPCAP.lp_short_name == short_name,
+                            tbPCAP.field == "Ending Capital Balance",
+                            # Look for dates within 5 days of pcap_date to handle date mismatches
+                            tbPCAP.pcap_date >= pcap_date.replace(day=max(1, pcap_date.day-5)),
+                            tbPCAP.pcap_date <= pcap_date.replace(day=min(28, pcap_date.day+5))
+                        )
+                    )\
+                    .order_by(func.abs(tbPCAP.pcap_date - pcap_date))\
+                    .first()
+                
+                if closest_pcap_balance:
+                    print(f"Found closest PCAP Ending Balance for reinvest-active fund: {closest_pcap_balance.amount} on {closest_pcap_balance.pcap_date}")
+                    cash_flows.append({
+                        "effective_date": closest_pcap_balance.pcap_date.strftime('%Y-%m-%d'),
+                        "activity": "PCAP Ending Balance (Reinvest)",
+                        "sub_activity": "NAV",
+                        "amount": closest_pcap_balance.amount,
+                        "entity_from": "",
+                        "entity_to": "",
+                        "related_fund": "All Funds"
+                    })
+                else:
+                    print("No ending balance found in tbPCAP for reinvest-active fund within date range")
         
         # Calculate IRR
         irr_value = None

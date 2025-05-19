@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_, func
 # Change from relative to absolute imports
 from backend.models import tbLedger, tbLPFund, tbPCAP
-from datetime import datetime
+from datetime import datetime, timedelta
 import csv
 import os
 from backend.services.irr_calculator import xirr
@@ -277,18 +277,67 @@ def calculate_lp_irr(db: Session, lp_short_name: str, report_date: str):
         dist_sum = sum(d.amount for d in distributions)
         print(f"Sum of distributions: {dist_sum}")
     
-    # Add ending balance from PCAP - Get the LAST/most recent Ending Capital Balance
-    # Use order_by to ensure we get the most recent entry if there are multiple with the same field name and date
-    ending_balance_record = db.query(tbPCAP)\
-        .filter(
-            and_(
-                tbPCAP.lp_short_name == lp_short_name,
-                tbPCAP.pcap_date == pcap_date,
-                tbPCAP.field == "Ending Capital Balance"
-            )
-        )\
-        .order_by(tbPCAP.field_num.desc())\
-        .first()
+    # Check if this LP is in reinvestment phase
+    funds = db.query(tbLPFund).filter(tbLPFund.lp_short_name == lp_short_name).all()
+    is_reinvest_active = any(
+        fund.reinvest_start and 
+        (datetime.strptime(fund.reinvest_start, '%m/%d/%Y').date() if isinstance(fund.reinvest_start, str) else fund.reinvest_start) <= pcap_date and
+        (not fund.harvest_start or 
+         (datetime.strptime(fund.harvest_start, '%m/%d/%Y').date() if isinstance(fund.harvest_start, str) else fund.harvest_start) > pcap_date)
+        for fund in funds
+    )
+    
+    if is_magic_lp:
+        print(f"LP in reinvestment phase: {is_reinvest_active}")
+    
+    # Modify the query for ending balance to look for the most recent record within a date range
+    # This helps with date mismatches like 2024-12-30 vs 2024-12-31
+    if is_reinvest_active or is_magic_lp:  # Apply special handling for reinvest-active funds and Magic
+        # First try with exact date match 
+        ending_balance_record = db.query(tbPCAP)\
+            .filter(
+                and_(
+                    tbPCAP.lp_short_name == lp_short_name,
+                    tbPCAP.pcap_date == pcap_date,
+                    tbPCAP.field == "Ending Capital Balance"
+                )
+            )\
+            .order_by(tbPCAP.field_num.desc())\
+            .first()
+            
+        # If no exact match, try to get the closest ending balance by date
+        if not ending_balance_record:
+            # Try for dates within the same month, prioritizing by date proximity
+            month_start = pcap_date.replace(day=1)
+            next_month = (pcap_date.replace(day=28) + timedelta(days=4)).replace(day=1)
+            
+            ending_balance_record = db.query(tbPCAP)\
+                .filter(
+                    and_(
+                        tbPCAP.lp_short_name == lp_short_name,
+                        tbPCAP.pcap_date >= month_start,
+                        tbPCAP.pcap_date < next_month,
+                        tbPCAP.field == "Ending Capital Balance"
+                    )
+                )\
+                .order_by(func.abs(tbPCAP.pcap_date - pcap_date))\
+                .first()
+                
+            if is_magic_lp and ending_balance_record:
+                print(f"Found closest date Ending Balance: {ending_balance_record.pcap_date}")
+                
+    else:
+        # Original ending balance query for non-reinvest-active funds
+        ending_balance_record = db.query(tbPCAP)\
+            .filter(
+                and_(
+                    tbPCAP.lp_short_name == lp_short_name,
+                    tbPCAP.pcap_date == pcap_date,
+                    tbPCAP.field == "Ending Capital Balance"
+                )
+            )\
+            .order_by(tbPCAP.field_num.desc())\
+            .first()
     
     if ending_balance_record:
         ending_balance = ending_balance_record.amount

@@ -262,12 +262,6 @@ const IRRTooltip: React.FC<IRRTooltipProps> = ({
                     <div className="tooltip-text">
                         <h4>IRR Calculation Explanation</h4>
                         
-                        {/* Display the IRR value if available */}
-                        {irrValue !== null && (
-                            <div className="irr-value">
-                                <p><strong>Internal Rate of Return:</strong> {formatPercent(irrValue)}</p>
-                            </div>
-                        )}
                         
                         {snapshotDataIssue && (
                             <div className="snapshot-data-warning">
