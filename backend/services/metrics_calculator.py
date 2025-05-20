@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, func
+from sqlalchemy import and_, func, or_
 # Change from relative to absolute imports
 from backend.models import tbLedger, tbLPFund, tbPCAP
 from datetime import datetime, timedelta
@@ -32,8 +32,19 @@ def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, repo
     total_commitment = sum(t.amount for t in commitment_transactions) if commitment_transactions else 0
     
     # Total Capital Called - sum of all Capital Call transactions
-    capital_call_transactions = base_query.filter(
-        tbLedger.activity == 'Capital Call'
+    # Updated to include both:
+    # 1. Standard capital calls where LP is the related_entity
+    # 2. Capital calls where LP is the entity_from (e.g., Indiana -> Red Rose)
+    capital_call_transactions = db.query(tbLedger).filter(
+        and_(
+            tbLedger.related_fund == fund_name,
+            tbLedger.activity == 'Capital Call',
+            tbLedger.effective_date <= report_date,
+            or_(
+                tbLedger.related_entity == lp_short_name,
+                tbLedger.entity_from == lp_short_name
+            )
+        )
     ).all()
     total_capital_called = sum(t.amount for t in capital_call_transactions) if capital_call_transactions else 0
     
@@ -93,8 +104,14 @@ def calculate_fund_metrics(db: Session, lp_short_name: str, fund_name: str, repo
     ).all()
     total_income_distribution = sum(t.amount for t in income_distribution_transactions) if income_distribution_transactions else 0
 
-    # Calculate remaining metrics
-    total_distribution = total_capital_distribution + total_income_distribution
+    # All distributions for more accurate total distribution calculation
+    all_distribution_transactions = base_query.filter(
+        tbLedger.activity == 'LP Distribution'
+    ).all()
+    total_distribution = sum(t.amount for t in all_distribution_transactions) if all_distribution_transactions else 0
+
+    # Note: We no longer calculate total_distribution as the sum of components
+    # Instead we get it directly from all LP Distribution transactions
     
     # Calculate both versions of remaining capital
     # Cash-based (traditional): Called Amount - Capital Distribution

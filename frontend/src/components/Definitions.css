@@ -1,0 +1,97 @@
+.definitions-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.definitions-container h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eaeaea;
+}
+
+.glossary-intro {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.definitions-section {
+    margin-bottom: 40px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.definitions-section h2 {
+    color: #1a5276;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eaeaea;
+}
+
+.definition-item {
+    margin-bottom: 30px;
+    padding-left: 15px;
+    border-left: 3px solid #3498db;
+}
+
+.definition-item:last-child {
+    margin-bottom: 0;
+}
+
+.definition-item h3 {
+    color: #2980b9;
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+}
+
+.definition-item p {
+    margin: 0;
+    color: #444;
+}
+
+.definition-item ul {
+    padding-left: 20px;
+    margin-top: 8px;
+}
+
+.definition-item li {
+    margin-bottom: 8px;
+}
+
+.definition-item strong {
+    font-weight: 600;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .definitions-container h1 {
+        font-size: 2rem;
+    }
+    
+    .definitions-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    .definition-item h3 {
+        font-size: 1.2rem;
+    }
+    
+    .glossary-intro {
+        font-size: 1rem;
+    }
+}
