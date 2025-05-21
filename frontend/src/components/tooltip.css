@@ -56,6 +56,47 @@
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+.tooltip-text .distribution-discrepancy {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #ddd;
+}
+
+.tooltip-text .discrepancy-note {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin: 0 0 5px 0;
+    font-style: italic;
+    display: flex;
+    align-items: flex-start;
+    line-height: 1.3;
+}
+
+.tooltip-text .info-icon {
+    font-size: 12px;
+    margin-right: 5px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.subcategory-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 18px;
+}
+
+.subcategory-list li {
+    margin: 3px 0;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.subcat-name {
+    color: #ccc;
+    margin-right: 8px;
+}
+
 .tooltip-data {
     padding: 8px;
     background-color: #444;

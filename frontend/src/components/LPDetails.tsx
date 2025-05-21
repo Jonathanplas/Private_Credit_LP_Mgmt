@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { LPDetails as LPDetailsType, Fund } from "../types/types";
+import { LPDetails as LPDetailsType, Fund, Transaction } from "../types/types";
 import Tooltip from './tooltip';
 import IRRTooltip from './IRRTooltip';
 import './LPDetails.css';
@@ -9,9 +9,6 @@ interface LocalLPDetailsProps {
     lpShortName: string;
     reportDate: string;
 }
-
-// Define the calculation method type
-type RemainingCapitalMethod = 'cash' | 'nav';
 
 const tooltipTexts = {
     totalCommitment: {
@@ -35,7 +32,7 @@ const tooltipTexts = {
         dataKey: "total_distribution"
     },
     remainingCapital: {
-        text: "Remaining Capital as of Report Date. For funds not in reinvestment phase: Called Amount – Capital Distribution. For funds in reinvestment phase: PCAP Ending Balance (includes appreciation/depreciation).",
+        text: "Remaining Capital as of Report Date. This value is based on the PCAP Ending Balance, which shows the most recent LP capital balance from partner capital statements, including appreciation/depreciation.",
         dataKey: "remaining_capital"
     },
     irr: {
@@ -52,8 +49,11 @@ const LPDetails: React.FC<LocalLPDetailsProps> = ({ lpShortName, reportDate }) =
     const [lpData, setLPData] = useState<LPDetailsType | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    // State for remaining capital calculation method
-    const [remainingCapitalMethod, setRemainingCapitalMethod] = useState<RemainingCapitalMethod>('cash');
+    const [distributionDiscrepancy, setDistributionDiscrepancy] = useState<{
+        difference: number, 
+        otherSubcategories: Array<{name: string, amount: number, transactions: Transaction[]}>,
+        otherSubcategoryNames?: string[]
+    } | null>(null);
 
     useEffect(() => {
         const fetchLPDetails = async () => {
@@ -96,7 +96,6 @@ const LPDetails: React.FC<LocalLPDetailsProps> = ({ lpShortName, reportDate }) =
         return new Date(date).toLocaleDateString();
     };
 
-    // Get the appropriate remaining capital value based on selected calculation method and data
     const getRemainingCapitalValue = (fund: Fund | null, totals = false): number => {
         if (!fund) return 0;
 
@@ -105,12 +104,8 @@ const LPDetails: React.FC<LocalLPDetailsProps> = ({ lpShortName, reportDate }) =
 
         const remainingCapital = metrics.remaining_capital;
         
-        if (remainingCapitalMethod === 'nav' && remainingCapital.nav_based_value !== undefined) {
+        if (remainingCapital.nav_based_value !== undefined) {
             return remainingCapital.nav_based_value;
-        }
-        
-        if (remainingCapitalMethod === 'cash' && remainingCapital.cash_based_value !== undefined) {
-            return remainingCapital.cash_based_value;
         }
         
         // Fallback to the default value
@@ -157,24 +152,20 @@ const LPDetails: React.FC<LocalLPDetailsProps> = ({ lpShortName, reportDate }) =
         </div>
     );
 
-    // Check if any fund is in reinvestment phase
     const hasReinvestActiveFunds = (): boolean => {
         if (!lpData?.funds) return false;
         
         const currentDate = new Date(reportDate);
         return lpData.funds.some(fund => {
-            // Check if fund has reinvest_start date
             if (!fund.reinvest_start) return false;
             
             const reinvestStartDate = new Date(fund.reinvest_start);
             const hasHarvestStarted = fund.harvest_start ? new Date(fund.harvest_start) <= currentDate : false;
             
-            // Fund is in reinvestment phase if reinvest has started but harvest hasn't
             return reinvestStartDate <= currentDate && !hasHarvestStarted;
         });
     };
 
-    // Reinvestment notification component
     const ReinvestmentNotification = () => (
         <div className="reinvestment-notification">
             <div className="notification-content">
@@ -186,6 +177,47 @@ const LPDetails: React.FC<LocalLPDetailsProps> = ({ lpShortName, reportDate }) =
             </div>
         </div>
     );
+
+    const getDistributionDiscrepancy = () => {
+        if (!lpData?.totals) return null;
+        
+        const { total_distribution, total_capital_distribution, total_income_distribution } = lpData.totals;
+        const sumOfParts = total_capital_distribution.value + total_income_distribution.value;
+        
+        if (Math.abs(total_distribution.value - sumOfParts) < 0.01) return null;
+        
+        const standardSubcategories = ['Capital Distribution', 'Income Distribution'];
+        
+        const otherSubcategoryDetails = total_distribution.transactions
+            .filter(t => !standardSubcategories.includes(t.sub_activity || ''))
+            .reduce((acc, t) => {
+                const key = t.sub_activity || 'Uncategorized';
+                if (!acc[key]) {
+                    acc[key] = {
+                        name: key,
+                        amount: 0,
+                        transactions: []
+                    };
+                }
+                acc[key].amount += t.amount;
+                acc[key].transactions.push(t);
+                return acc;
+            }, {} as Record<string, { name: string, amount: number, transactions: Transaction[] }>);
+        
+        const otherSubcategories = Object.values(otherSubcategoryDetails);
+        
+        return {
+            difference: total_distribution.value - sumOfParts,
+            otherSubcategories,
+            otherSubcategoryNames: otherSubcategories.map(sc => sc.name)
+        };
+    };
+
+    useEffect(() => {
+        if (lpData?.totals) {
+            setDistributionDiscrepancy(getDistributionDiscrepancy());
+        }
+    }, [lpData?.totals]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div className="error">{error}</div>;
@@ -277,36 +309,20 @@ const LPDetails: React.FC<LocalLPDetailsProps> = ({ lpShortName, reportDate }) =
                                         text={tooltipTexts.totalDistribution.text}
                                         transactions={lpData.totals.total_distribution.transactions}
                                         metricName="total_distribution"
+                                        distributionDiscrepancy={distributionDiscrepancy}
                                     />
                                 </span>
                             </div>
                             <div className="metric-row">
                                 <span className="metric-label">Remaining Capital:</span>
-                                <div className="remaining-capital-container">
-                                    <div className="toggle-container">
-                                        <div className="toggle-switch">
-                                            <input
-                                                type="checkbox"
-                                                id="calculation-toggle"
-                                                checked={remainingCapitalMethod === 'nav'}
-                                                onChange={() => setRemainingCapitalMethod(remainingCapitalMethod === 'cash' ? 'nav' : 'cash')}
-                                            />
-                                            <label htmlFor="calculation-toggle">
-                                                <span className="toggle-label">Cash-Based</span>
-                                                <span className="toggle-button"></span>
-                                                <span className="toggle-label">NAV-Based</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <span className="metric-value">
-                                        {formatCurrency(lpData.totals.remaining_capital[remainingCapitalMethod === 'nav' ? 'nav_based_value' : 'cash_based_value'])}
-                                        <Tooltip 
-                                            text={tooltipTexts.remainingCapital.text}
-                                            transactions={lpData.totals.remaining_capital.transactions}
-                                            metricName="remaining_capital"
-                                        />
-                                    </span>
-                                </div>
+                                <span className="metric-value">
+                                    {formatCurrency(lpData.totals.remaining_capital.nav_based_value)}
+                                    <Tooltip 
+                                        text={tooltipTexts.remainingCapital.text}
+                                        transactions={lpData.totals.remaining_capital.transactions}
+                                        metricName="remaining_capital"
+                                    />
+                                </span>
                             </div>
                         </div>
                         <div className="irr-info">

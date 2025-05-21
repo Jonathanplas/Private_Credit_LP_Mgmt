@@ -7,9 +7,18 @@ interface TooltipProps {
     transactions?: Transaction[];
     metricName?: string;
     children?: React.ReactNode;
+    distributionDiscrepancy?: {
+        difference: number;
+        otherSubcategories: Array<{
+            name: string;
+            amount: number;
+            transactions: Transaction[];
+        }>;
+        otherSubcategoryNames?: string[];
+    } | null;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ text, transactions, metricName, children }) => {
+const Tooltip: React.FC<TooltipProps> = ({ text, transactions, metricName, children, distributionDiscrepancy }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [showBelow, setShowBelow] = useState(false);
     const tooltipRef = useRef<HTMLDivElement>(null);
@@ -105,7 +114,19 @@ const Tooltip: React.FC<TooltipProps> = ({ text, transactions, metricName, child
                     ref={contentRef}
                     style={{ visibility: 'hidden', opacity: 0 }}
                 >
-                    <div className="tooltip-text">{text}</div>
+                    <div className="tooltip-text">
+                        {text}
+                        {distributionDiscrepancy && distributionDiscrepancy.otherSubcategories.length > 0 && (
+                            <div className="distribution-discrepancy">
+                                <p className="discrepancy-note">
+                                    <span className="info-icon">ℹ️</span> 
+                                    Also includes {formatCurrency(distributionDiscrepancy.difference)} 
+                                    {distributionDiscrepancy.otherSubcategories.length > 0 && 
+                                     ` (e.g., ${distributionDiscrepancy.otherSubcategories[0].name})`}
+                                </p>
+                            </div>
+                        )}
+                    </div>
                     {transactions && transactions.length > 0 && (
                         <div className="tooltip-data">
                             <table className="data-preview">
