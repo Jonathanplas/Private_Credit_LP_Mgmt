@@ -32,7 +32,7 @@ const tooltipTexts = {
         dataKey: "total_distribution"
     },
     remainingCapital: {
-        text: "Remaining Capital as of Report Date. This value is based on the PCAP Ending Balance, which shows the most recent LP capital balance from partner capital statements, including appreciation/depreciation.",
+        text: "Remaining Capital as of Report Date. This value shows the LP's most recent capital balance from their partner capital statement (PCAP), including any appreciation or depreciation of investments.",
         dataKey: "remaining_capital"
     },
     irr: {
@@ -93,7 +93,10 @@ const LPDetails: React.FC<LocalLPDetailsProps> = ({ lpShortName, reportDate }) =
 
     const formatDate = (date: string | null): string => {
         if (!date) return 'N/A';
-        return new Date(date).toLocaleDateString();
+        // Parse the date parts and create the date object with local timezone
+        // This prevents timezone shifts when displaying dates
+        const [year, month, day] = date.split('-').map(Number);
+        return new Date(year, month - 1, day).toLocaleDateString();
     };
 
     const getRemainingCapitalValue = (fund: Fund | null, totals = false): number => {
@@ -319,8 +322,15 @@ const LPDetails: React.FC<LocalLPDetailsProps> = ({ lpShortName, reportDate }) =
                                     {formatCurrency(lpData.totals.remaining_capital.nav_based_value)}
                                     <Tooltip 
                                         text={tooltipTexts.remainingCapital.text}
-                                        transactions={lpData.totals.remaining_capital.transactions}
                                         metricName="remaining_capital"
+                                        customTooltipContent={
+                                            <div className="pcap-balance-info">
+                                                <p><strong>PCAP Ending Balance Information:</strong></p>
+                                                <p>Date: {formatDate(lpData.pcap_report_date)}</p>
+                                                <p>Capital Balance: {formatCurrency(lpData.totals.remaining_capital.nav_based_value)}</p>
+                                                <p className="note">This value represents the LP's ownership stake in the fund assets as reported on the partner capital statement, including all unrealized gains/losses and accrued items.</p>
+                                            </div>
+                                        }
                                     />
                                 </span>
                             </div>

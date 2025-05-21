@@ -16,9 +16,10 @@ interface TooltipProps {
         }>;
         otherSubcategoryNames?: string[];
     } | null;
+    customTooltipContent?: React.ReactNode;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ text, transactions, metricName, children, distributionDiscrepancy }) => {
+const Tooltip: React.FC<TooltipProps> = ({ text, transactions, metricName, children, distributionDiscrepancy, customTooltipContent }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [showBelow, setShowBelow] = useState(false);
     const tooltipRef = useRef<HTMLDivElement>(null);
@@ -127,6 +128,7 @@ const Tooltip: React.FC<TooltipProps> = ({ text, transactions, metricName, child
                             </div>
                         )}
                     </div>
+                    {customTooltipContent}
                     {transactions && transactions.length > 0 && (
                         <div className="tooltip-data">
                             <table className="data-preview">

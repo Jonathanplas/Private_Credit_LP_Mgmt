@@ -348,3 +348,27 @@
 .snapshot-data-warning p strong {
     color: #0078D7;
 }
+
+/* PCAP balance information styles */
+.pcap-balance-info {
+    padding: 10px;
+    background-color: #444;
+    border-radius: 0 0 4px 4px;
+}
+
+.pcap-balance-info p {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+.pcap-balance-info strong {
+    color: #fff;
+}
+
+.pcap-balance-info .note {
+    color: #aaa;
+    font-style: italic;
+    font-size: 12px;
+    margin-top: 8px;
+    line-height: 1.3;
+}
