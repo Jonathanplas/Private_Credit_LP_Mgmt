@@ -13,7 +13,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>i80 LP Management</h1>
+        <h1>LP Management</h1>
         <nav className="main-navigation">
           <button 
             className={currentView === 'lp' ? 'active' : ''}

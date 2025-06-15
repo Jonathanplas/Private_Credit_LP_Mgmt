@@ -29,6 +29,8 @@ Thumbs.db
 # Database
 *.db
 *.sqlite3
+backend/lpmanagement.db
+backend/i80.db
 
 # Logs
 *.log

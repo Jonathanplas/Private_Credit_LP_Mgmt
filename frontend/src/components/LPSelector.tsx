@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { LP } from "../types/types";
+import config from '../config';
 import './LPSelector.css';
 
 interface LPSelectorProps {
@@ -16,7 +17,7 @@ const LPSelector: React.FC<LPSelectorProps> = ({ onLPSelect, onDateChange }) => 
     useEffect(() => {
         const fetchLPs = async () => {
             try {
-                const response = await axios.get<LP[]>("http://localhost:8000/api/lps");
+                const response = await axios.get<LP[]>(`${config.API_URL}/api/lps`);
                 setLPList(response.data);
             } catch (error) {
                 console.error("Failed to fetch LPs:", error);

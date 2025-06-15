@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { LPDetails as LPDetailsType, Fund, Transaction } from "../types/types";
+import config from '../config';
 import Tooltip from './tooltip';
 import IRRTooltip from './IRRTooltip';
 import './LPDetails.css';
@@ -66,7 +67,7 @@ const LPDetails: React.FC<LocalLPDetailsProps> = ({ lpShortName, reportDate }) =
                 setLoading(true);
                 setError(null);
                 const response = await axios.get<LPDetailsType>(
-                    `http://localhost:8000/api/lp/${lpShortName}?report_date=${reportDate}`
+                    `${config.API_URL}/api/lp/${lpShortName}?report_date=${reportDate}`
                 );
                 console.log('API Response:', response.data); // For debugging
                 setLPData(response.data);

@@ -1,4 +1,4 @@
-# i80 LP Management System
+# LP Management System
 
 A web-based application for managing and viewing Limited Partner (LP) investments across multiple funds, with a focus on transparency and accurate financial calculations.
 
@@ -52,6 +52,18 @@ This script:
 - Starts the frontend development server at http://localhost:3000
 - Provides clear status information for both services
 - Handles proper shutdown of all components with a single Ctrl+C
+
+### Environment Setup
+
+1. Copy the example environment file and update it with your database credentials:
+
+```bash
+cp .env.example .env
+```
+
+2. Edit the `.env` file with your database settings:
+   - For PostgreSQL: Update DB_USER, DB_PASSWORD, and DB_NAME
+   - For SQLite: Set DB_TYPE=sqlite (no additional setup needed)
 
 ### Manual Setup
 

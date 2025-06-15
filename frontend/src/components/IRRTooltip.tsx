@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import config from '../config';
 import './tooltip.css';
 
 interface IRRTooltipProps {
@@ -115,7 +116,7 @@ const IRRTooltip: React.FC<IRRTooltipProps> = ({
             setLoading(true);
             setError(null);
             const response = await axios.get<IRRCashFlowsResponse>(
-                `http://localhost:8000/api/lp/${lpShortName}/irr-cash-flows?report_date=${reportDate}`
+                `${config.API_URL}/api/lp/${lpShortName}/irr-cash-flows?report_date=${reportDate}`
             );
             
             setCashFlows(response.data.cash_flows);

@@ -5,12 +5,17 @@ from backend.models import tbLPLookup, tbLPFund, tbPCAP, tbLedger
 from datetime import datetime
 
 
-# Define file paths
+# Define file paths - using relative paths for portability
+import os
+
+# Get the absolute path of the project root directory
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 csv_files = {
-    "tbLPLookup": "/Users/jonathanplas/Desktop/i80/data/tbLPLookup.csv",
-    "tbLPFund": "/Users/jonathanplas/Desktop/i80/data/tbLPFund.csv",
-    "tbPCAP": "/Users/jonathanplas/Desktop/i80/data/tbPCAP.csv",
-    "tbLedger": "/Users/jonathanplas/Desktop/i80/data/tbLedger.csv",
+    "tbLPLookup": os.path.join(project_root, "data", "tbLPLookup.csv"),
+    "tbLPFund": os.path.join(project_root, "data", "tbLPFund.csv"),
+    "tbPCAP": os.path.join(project_root, "data", "tbPCAP.csv"),
+    "tbLedger": os.path.join(project_root, "data", "tbLedger.csv"),
 }
 
 # Define column mappings

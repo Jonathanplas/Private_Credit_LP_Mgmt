@@ -23,4 +23,4 @@ app.include_router(data_routes.router)
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the i80 Developer Case Study API"}
+    return {"message": "Welcome to the LP Management System API"}

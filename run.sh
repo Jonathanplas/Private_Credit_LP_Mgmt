@@ -1,12 +1,13 @@
 #!/bin/bash
 
-# i80 Application Launcher
-# This script launches both the backend and frontend components of the i80 application
+# LP Management Application Launcher
+# This script launches both the backend and frontend components of the LP Management application
 
 # Set colors for better visibility
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -14,8 +15,19 @@ BACKEND_DIR="$PROJECT_ROOT/backend"
 FRONTEND_DIR="$PROJECT_ROOT/frontend"
 
 echo -e "${BLUE}=======================================${NC}"
-echo -e "${GREEN}Starting i80 LP Management System${NC}"
+echo -e "${GREEN}Starting LP Management System${NC}"
 echo -e "${BLUE}=======================================${NC}"
+
+# Check for .env file, create from template if it doesn't exist
+if [ ! -f "$PROJECT_ROOT/.env" ]; then
+    echo -e "${YELLOW}Environment file not found, creating from template...${NC}"
+    if [ -f "$PROJECT_ROOT/.env.example" ]; then
+        cp "$PROJECT_ROOT/.env.example" "$PROJECT_ROOT/.env"
+        echo -e "${GREEN}Created .env file from template. Please edit it with your database credentials.${NC}"
+    else
+        echo -e "${RED}No .env.example template found! Please create a .env file manually.${NC}"
+    fi
+fi
 
 # Check if Python virtual environment exists, if not create it
 if [ ! -d "$PROJECT_ROOT/.venv" ]; then
@@ -93,7 +105,7 @@ else
 fi
 
 echo -e "${BLUE}=======================================${NC}"
-echo -e "${GREEN}i80 LP Management System is running!${NC}"
+echo -e "${GREEN}LP Management System is running!${NC}"
 echo -e "${YELLOW}Press Ctrl+C to stop all services${NC}"
 echo -e "${BLUE}=======================================${NC}"
 

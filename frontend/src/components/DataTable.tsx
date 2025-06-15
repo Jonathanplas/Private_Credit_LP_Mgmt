@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { TableProps, LPLookupData, LPFundData, PCAPData, LedgerData } from '../types/types';
+import config from '../config';
 import './DataTable.css';
 
 // Define the API base URL
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = config.API_URL;
 
 type DataType = LPLookupData | LPFundData | PCAPData | LedgerData;
 

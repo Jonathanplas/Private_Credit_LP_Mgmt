@@ -4,9 +4,9 @@ import './Definitions.css';
 const Definitions: React.FC = () => {
     return (
         <div className="definitions-container">
-            <h1>i80 Financial Terms Glossary</h1>
+            <h1>Financial Terms Glossary</h1>
             <p className="glossary-intro">
-                This glossary provides definitions for financial terms used throughout the i80 application.
+                This glossary provides definitions for financial terms used throughout the LP Management application.
                 Understanding these terms is essential for proper interpretation of the data and metrics presented.
             </p>
 
@@ -25,12 +25,12 @@ const Definitions: React.FC = () => {
 
                 <div className="definition-item">
                     <h3>Source</h3>
-                    <p>The origin or channel through which the LP was introduced to i80.</p>
+                    <p>The origin or channel through which the LP was introduced to the fund.</p>
                 </div>
 
                 <div className="definition-item">
                     <h3>First Close Date</h3>
-                    <p>The date when the LP's initial investment agreement with i80 was finalized.</p>
+                    <p>The date when the LP's initial investment agreement was finalized.</p>
                 </div>
 
                 <div className="definition-item">
