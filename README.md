@@ -2,8 +2,21 @@
 
 A web-based application for managing and viewing Limited Partner (LP) investments across multiple funds, with a focus on transparency and accurate financial calculations.
 
+## Screenshots
+
+Here's a preview of the LP Management System interface:
+
+### Dashboard Overview
+![Dashboard Overview](screenshots/dashboard_overview.png)
+*Main dashboard showing LP selection, financial metrics, and IRR information*
+
+### Portfolio View
+![Portfolio View](screenshots/portfolio_view.png)
+*Detailed view of fund investments for a selected LP*
+
 ## Table of Contents
 
+- [Screenshots](#screenshots)
 - [Architecture Overview](#architecture-overview)
 - [Technology Stack](#technology-stack)
 - [Getting Started](#getting-started)
